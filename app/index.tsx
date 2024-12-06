@@ -1,19 +1,27 @@
-import { Stack, Link } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
+import { View, Text, ImageBackground } from 'react-native';
 
-import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
-import { ScreenContent } from '~/components/ScreenContent';
+import onBoarding from '../assets/onboarding.png';
 
-export default function Home() {
+const Page = () => {
+  const router = useRouter(); // Get the router instance
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.replace('/(onboarding)/onBoarding1');
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [router]);
+
   return (
-    <>
-      <Stack.Screen options={{ title: 'Home' }} />
-      <Container>
-        <ScreenContent path="app/index.tsx" title="Home" />
-        <Link href={{ pathname: '/details', params: { name: 'Dan' } }} asChild>
-          <Button title="Show Details" />
-        </Link>
-      </Container>
-    </>
+    <View style={{ flex: 1 }}>
+      <ImageBackground
+        source={onBoarding}
+        style={{ flex: 1, width: '100%', height: '100%' }}></ImageBackground>
+    </View>
   );
-}
+};
+
+export default Page;
