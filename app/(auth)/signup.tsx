@@ -14,6 +14,7 @@ import {
   Keyboard,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from 'react-native';
 import logo from '../../assets/Logo-img.png';
 import fb from '../../assets/fb.png';
@@ -21,10 +22,22 @@ import gg from '../../assets/gg.png';
 import signinBgImg from '../../assets/signin-bg-img.png';
 import { Link, router } from 'expo-router';
 import { useAuthStore } from '~/store/auth-store';
+// import axios, { AxiosError } from 'axios';
+
+// import * as SecureStore from 'expo-secure-store';
 
 const SignUp = () => {
-  const { showPassword, setShowPassword, email, setEmail, password, setPassword, setUserData } =
-    useAuthStore();
+  // const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
+  const {
+    showPassword,
+    setShowPassword,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    setUserData,
+    loading,
+  } = useAuthStore();
 
   const handleSignUp = async () => {
     setUserData({ email, password });
@@ -99,8 +112,11 @@ const SignUp = () => {
 
           <TouchableOpacity
             onPress={handleSignUp}
+            disabled={!email || !password || loading}
             className=" mx-auto mt-10 h-16 w-44  items-center justify-center rounded-xl bg-green-500 px-4 py-2">
-            <Text className="text-lg font-bold text-white">Create Account</Text>
+            <Text className="text-lg font-bold text-white">
+              {loading ? 'Loading...' : 'Create Account'}
+            </Text>
           </TouchableOpacity>
 
           <Link href="/(auth)/signin" className=" mt-7 text-center font-semibold text-green-600">

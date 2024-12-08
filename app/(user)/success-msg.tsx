@@ -23,7 +23,7 @@ const SuccessMsg = () => {
       <Text className=" mt-5 text-center text-3xl font-bold">Your Profile Is Ready To Use</Text>
 
       <View className="absolute bottom-10 left-6 right-6">
-        <OnBoardingBtn screen={'/(user)/photo-preview'} title="Try Order" />
+        <OnBoardingBtn screen={'/(tabs)'} title="Try Order" />
       </View>
     </View>
   );

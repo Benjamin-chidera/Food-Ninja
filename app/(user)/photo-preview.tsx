@@ -1,13 +1,19 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image } from 'react-native';
 
-import gallery from '../../assets/Gallery.png';
 import bioImg from '../../assets/signin-bg-img.png';
 
 import OnBoardingBtn from '~/components/onBoarding-btn';
 
+import { useLocalSearchParams } from 'expo-router';
+
+
 const PhotoPreview = () => {
+  const { photo } = useLocalSearchParams();
+
+  
+
   return (
     <View className="flex-1 bg-white">
       {/* Header Image */}
@@ -23,9 +29,9 @@ const PhotoPreview = () => {
         <View className="items-center justify-center">
           <Image
             source={{
-              uri: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=600',
+              uri: photo as string,
             }}
-            className="h-[238px] w-[245px] rounded-3xl bg-black"
+            className="h-[238px] w-[245px] rounded-3xl"
           />
         </View>
       </View>

@@ -73,6 +73,7 @@ const Bio = () => {
         <View className="absolute bottom-10 left-6 right-6">
           {/* <OnBoardingBtn screen={''} title="Next" /> */}
           <TouchableOpacity
+            disabled={!firstName || !lastName || !phoneNumber}
             onPress={handleSubmit}
             className=" mx-auto mt-10 h-16 w-40  items-center justify-center rounded-xl bg-green-500 px-4 py-2">
             <Text className="text-lg font-bold text-white">Next</Text>

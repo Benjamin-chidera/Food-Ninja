@@ -19,12 +19,42 @@ import logo from '../../assets/Logo-img.png';
 import fb from '../../assets/fb.png';
 import gg from '../../assets/gg.png';
 import signinBgImg from '../../assets/signin-bg-img.png';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useAuthStore } from '~/store/auth-store';
-import AuthButton from '~/components/buttons/auth-button';
+import axios, { AxiosError } from 'axios';
+
+import * as SecureStore from 'expo-secure-store';
 
 const SignIn = () => {
-  const { showPassword, setShowPassword } = useAuthStore();
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
+
+  const { showPassword, setShowPassword, password, setPassword, email, setEmail, setUserData } =
+    useAuthStore();
+
+  const handleSignIn = async () => {
+    setUserData({ email, password });
+
+    try {
+      const { data } = await axios.post(`${apiUrl}/auth/signin`, {
+        email,
+        password,
+      });
+
+      // console.log(data);
+      router.replace('/(tabs)');
+
+      setUserData({
+        email: '',
+        password: '',
+      });
+
+      await SecureStore.setItemAsync('token', data.user);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error?.response?.data.message);
+      }
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -50,6 +80,8 @@ const SignIn = () => {
                 className="h-[57px] rounded-2xl border px-5 placeholder:text-blue-400"
                 placeholder="Email"
                 keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail}
               />
 
               {/* Password Input */}
@@ -58,6 +90,8 @@ const SignIn = () => {
                   className="h-[57px] rounded-2xl border px-5 pr-10 placeholder:text-blue-400"
                   placeholder="Password"
                   secureTextEntry={showPassword ? false : true}
+                  value={password}
+                  onChangeText={setPassword}
                 />
 
                 <Pressable
@@ -93,7 +127,14 @@ const SignIn = () => {
         </View>
 
         <View className="absolute bottom-10 left-6 right-6">
-          <AuthButton title="Login" screen={''} />
+          {/* <AuthButton title="Login" screen={''} /> */}
+
+          <TouchableOpacity
+            onPress={handleSignIn}
+            disabled={!email || !password}
+            className=" mx-auto mt-10 h-16 w-44  items-center justify-center rounded-xl bg-green-500 px-4 py-2">
+            <Text className="text-lg font-bold text-white">Login</Text>
+          </TouchableOpacity>
 
           <Link href="/(auth)/signup" className=" mt-7 text-center font-semibold text-green-600">
             Don't have an account? Sign Up

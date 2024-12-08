@@ -1,10 +1,19 @@
 /* eslint-disable prettier/prettier */
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import onBoarding from '~/assets/onboarding1.png';
-import OnBoardingBtn from '~/components/onBoarding-btn';
+import { router } from 'expo-router';
+// import OnBoardingBtn from '~/components/onBoarding-btn';
+
+import * as SecureStore from 'expo-secure-store';
 
 const OnBoarding1 = () => {
+  const handleNext = async () => {
+    await SecureStore.setItemAsync('onboarding', 'done');
+
+    router.replace('/(onboarding)/onBoarding2');
+  };
+
   return (
     <View className=" h-full flex-1 bg-white">
       <View className=" mt-14">
@@ -23,7 +32,13 @@ const OnBoarding1 = () => {
       </View>
 
       <View className="absolute bottom-10 left-6 right-6">
-        <OnBoardingBtn screen="/(onboarding)/onBoarding2" title={'Next'} />
+        {/* <OnBoardingBtn screen="/(onboarding)/onBoarding2" title={'Next'} /> */}
+
+        <TouchableOpacity
+          onPress={handleNext}
+          className=" mx-auto mt-10 h-16 w-40  items-center justify-center rounded-xl bg-green-500 px-4 py-2">
+          <Text className="text-lg font-bold text-white">Next</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

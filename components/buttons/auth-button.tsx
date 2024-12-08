@@ -6,10 +6,10 @@ import { Text, TouchableOpacity } from 'react-native';
 const AuthButton = ({
   title,
   screen,
-  data,
+  // data,
 }: {
   title: string;
-  data: UnknownInputParams | any;
+  // data: UnknownInputParams | any;
   screen: RelativePathString | any;
 }) => {
   return (
@@ -17,7 +17,7 @@ const AuthButton = ({
       onPress={() =>
         router.replace({
           pathname: screen,
-          params: data,
+          // params: data,
         })
       }
       className=" mx-auto mt-10 h-16 w-44  items-center justify-center rounded-xl bg-green-500 px-4 py-2">

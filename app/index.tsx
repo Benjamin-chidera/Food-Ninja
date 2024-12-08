@@ -1,27 +1,62 @@
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
-import { View, Text, ImageBackground } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, ImageBackground, ActivityIndicator } from 'react-native';
 
 import onBoarding from '../assets/onboarding.png';
+import { useAuth } from '~/store/auth-context';
 
 const Page = () => {
-  const router = useRouter(); // Get the router instance
+  const router = useRouter();
+  const { isLoading, isLoggedIn, hasCompletedOnboarding } = useAuth();
+  const [showImage, setShowImage] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace('/(onboarding)/onBoarding1');
+      setShowImage(false);
+
+      if (isLoggedIn) {
+        router.replace('/(tabs)');
+      } else if (!hasCompletedOnboarding) {
+        router.replace('/(onboarding)/onBoarding1');
+      } else {
+        router.replace('/(auth)/signin');
+      }
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [isLoggedIn, hasCompletedOnboarding]);
 
-  return (
-    <View style={{ flex: 1 }}>
-      <ImageBackground
-        source={onBoarding}
-        style={{ flex: 1, width: '100%', height: '100%' }}></ImageBackground>
-    </View>
-  );
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#fff',
+        }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (showImage) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#fff',
+        }}>
+        <ImageBackground
+          source={onBoarding}
+          style={{ flex: 1, width: '100%', height: '100%' }}></ImageBackground>
+      </View>
+    );
+  }
+
+  return null;
 };
 
 export default Page;

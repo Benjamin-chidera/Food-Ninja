@@ -25,9 +25,33 @@ export interface AuthState {
   photo: string;
   setPhoto: (photo: string) => void;
 
+  location: string;
+  setLocation: (location: string) => void;
+
+  isLoggedIn: null | string | boolean;
+  setIsLoggedIn: (isLoggedIn: null | string) => void;
+
   // user data
-  userData: object;
+  userData: {
+    email: '';
+    password: '';
+    firstName: '';
+    lastName: '';
+    phoneNumber: '';
+    photo: '';
+    location: '';
+    otp: '';
+  };
   setUserData: (userData: object) => void;
+
+  otp: string;
+  setOtp: (otp: string) => void;
+
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+
+  user: string;
+  setUser: (user: string) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -54,6 +78,21 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   photo: '',
   setPhoto: (photo) => set({ photo }),
+
+  location: '',
+  setLocation: (location) => set({ location }),
+
+  otp: '',
+  setOtp: (otp) => set({ otp }),
+
+  loading: false,
+  setLoading: (loading) => set({ loading }),
+
+  user: '',
+  setUser: (user) => set({ user }),
+
+  isLoggedIn: null,
+  setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 
   // user data
   userData: {
