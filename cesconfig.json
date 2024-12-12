@@ -28,12 +28,12 @@
   },
   "packageManager": {
     "type": "npm",
-    "version": "10.2.5"
+    "version": "10.9.0"
   },
   "os": {
-    "type": "Windows_NT",
-    "platform": "win32",
+    "type": "Darwin",
+    "platform": "darwin",
     "arch": "x64",
-    "kernelVersion": "10.0.22631"
+    "kernelVersion": "24.1.0"
   }
 }

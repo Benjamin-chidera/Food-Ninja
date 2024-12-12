@@ -12,16 +12,14 @@ import {
   Alert,
 } from 'react-native';
 
-import gallery from '../../assets/Gallery.png';
 import bioImg from '../../assets/signin-bg-img.png';
 
-import OnBoardingBtn from '~/components/onBoarding-btn';
+
 import { MapPin } from 'lucide-react-native';
 import { useAuthStore } from '~/store/auth-store';
 import { router } from 'expo-router';
 import axios, { AxiosError } from 'axios';
 
-import * as SecureStore from 'expo-secure-store';
 
 const UserLocation = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
@@ -38,6 +36,9 @@ const UserLocation = () => {
     setUser,
   } = useAuthStore();
   const platform = Platform.OS === 'android';
+
+  console.log(userData);
+  
 
   const handleSubmit = async () => {
     setUserData({ location });
@@ -70,7 +71,7 @@ const UserLocation = () => {
       if (data.success) {
         setUser(data.user);
 
-        // console.log(data);
+        console.log(data);
         
 
         setUserData({

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, ActivityIndicator } from 'react-native';
 
 import onBoarding from '../assets/onboarding.png';
+
 import { useAuth } from '~/store/auth-context';
 
 const Page = () => {
