@@ -2,11 +2,9 @@ import { AuthProvider } from '~/store/auth-context';
 import '../global.css';
 
 import { Stack } from 'expo-router';
-import { StatusBar } from 'react-native';
+import { StatusBar, Text, View } from 'react-native';
 
 export default function Layout() {
- 
-
   return (
     <AuthProvider>
       <Stack>
@@ -98,6 +96,35 @@ export default function Layout() {
             headerShown: false,
           }}
         />
+
+        {/* this is for the more nearest restaurant screens  */}
+
+        <Stack.Screen
+          name="(nearest-restaurant)"
+          options={{
+            headerTitle: '',
+            headerBackTitle: 'Back',
+            headerTransparent: true,
+            headerBackVisible: true,
+            // headerLargeTitle: true,
+          }}
+        />
+
+        {/* this is for the popular menu */}
+
+        <Stack.Screen
+          name="(popular-menu)"
+          options={{
+            headerTitle: '',
+            headerBackTitle: 'Back',
+            headerTransparent: true,
+            headerBackVisible: true,
+            // headerLargeTitle: true,
+          }}
+        />
+
+        {/* this is for the popular menu */}
+
         {/* <statusbar /> */}
       </Stack>
     </AuthProvider>

@@ -23,7 +23,7 @@ const Home = () => {
   const getCurrentMonth = new Date().toLocaleString('default', { month: 'long' });
 
   return (
-    <SafeAreaView className={`p-5 ${platform && 'pr-5'} mt-5`}>
+    <SafeAreaView className={`p-5 ${platform && 'pr-5'}`}>
       <View className="mb-5 flex-row items-center justify-between">
         <Text className=" max-w-[200px] text-4xl font-bold">Find Your Favorite Food</Text>
 

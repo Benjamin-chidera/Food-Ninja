@@ -47,7 +47,7 @@ const NearestRestaurant = () => {
       <View className={` flex-row items-center justify-between ${platform && 'pr-3'}`}>
         <Text className=" text-xl font-semibold">Nearest Restaurant</Text>
 
-        <Link href="/" className=" text-sm text-green-600">
+        <Link href="/(nearest-restaurant)" className=" text-sm text-green-600">
           View More
         </Link>
       </View>

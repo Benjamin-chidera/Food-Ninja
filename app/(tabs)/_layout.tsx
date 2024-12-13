@@ -10,9 +10,7 @@ const TabsLayout = () => {
         name="index"
         options={{
           headerShown: false,
-          
         }}
-        
       />
       <Tabs.Screen name="chat" />
       <Tabs.Screen name="cart" />
