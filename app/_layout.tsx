@@ -102,11 +102,7 @@ export default function Layout() {
         <Stack.Screen
           name="(nearest-restaurant)"
           options={{
-            headerTitle: '',
-            headerBackTitle: 'Back',
-            headerTransparent: true,
-            headerBackVisible: true,
-            // headerLargeTitle: true,
+            headerShown: false,
           }}
         />
 
@@ -115,11 +111,7 @@ export default function Layout() {
         <Stack.Screen
           name="(popular-menu)"
           options={{
-            headerTitle: '',
-            headerBackTitle: 'Back',
-            headerTransparent: true,
-            headerBackVisible: true,
-            // headerLargeTitle: true,
+            headerShown: false,
           }}
         />
 

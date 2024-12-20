@@ -50,9 +50,7 @@ const Page = () => {
           alignItems: 'center',
           backgroundColor: '#fff',
         }}>
-        <ImageBackground
-          source={onBoarding}
-          style={{ flex: 1, width: '100%', height: '100%' }}></ImageBackground>
+        <ImageBackground source={onBoarding} style={{ flex: 1, width: '100%', height: '100%' }} />
       </View>
     );
   }

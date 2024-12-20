@@ -8,7 +8,14 @@ const PopularMenuLayout = () => {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false,
+          headerTransparent: true,
+          headerTitle: 'Popular Menu',
+          headerLargeTitle: true,
+          headerLargeTitleStyle: {
+            fontSize: 30,
+            fontWeight: 'bold',
+          },
+          headerLargeTitleShadowVisible: false,
         }}
       />
     </Stack>

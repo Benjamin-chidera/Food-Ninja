@@ -8,7 +8,14 @@ const NearestRestaurantStackLayout = () => {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false,
+          headerTransparent: true,
+          headerTitle: 'Find your Favorite Food',
+          headerLargeTitle: true,
+          headerLargeTitleStyle: {
+            fontSize: 30,
+            fontWeight: 'bold',
+          },
+          headerLargeTitleShadowVisible: false,
         }}
       />
     </Stack>
