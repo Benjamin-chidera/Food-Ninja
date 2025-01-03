@@ -1,3 +1,4 @@
+import "../global.css";
 import { AuthProvider } from '~/store/auth-context';
 import '../global.css';
 
