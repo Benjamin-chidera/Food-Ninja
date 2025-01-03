@@ -28,11 +28,21 @@ import * as SecureStore from 'expo-secure-store';
 const SignIn = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
 
-  const { showPassword, setShowPassword, password, setPassword, email, setEmail, setUserData } =
-    useAuthStore();
+  const {
+    showPassword,
+    setShowPassword,
+    password,
+    setPassword,
+    email,
+    setEmail,
+    setUserData,
+    loading,
+    setLoading,
+  } = useAuthStore();
 
   const handleSignIn = async () => {
     setUserData({ email, password });
+    setLoading(true);
 
     try {
       const { data } = await axios.post(`${apiUrl}/auth/signin`, {
@@ -40,18 +50,19 @@ const SignIn = () => {
         password,
       });
 
-      // console.log(data);
-      router.replace('/(tabs)');
-
-      setUserData({
-        email: '',
-        password: '',
-      });
-
-      await SecureStore.setItemAsync('token', data.user);
+      if (data.success) {
+        setLoading(false);
+        await SecureStore.setItemAsync('token', data.user);
+        setUserData({
+          email: '',
+          password: '',
+        });
+        router.replace('/(tabs)');
+      }
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error?.response?.data.message);
+        setLoading(false);
       }
     }
   };
@@ -131,9 +142,11 @@ const SignIn = () => {
 
           <TouchableOpacity
             onPress={handleSignIn}
-            disabled={!email || !password}
+            disabled={!email || !password || loading}
             className=" mx-auto mt-10 h-16 w-44  items-center justify-center rounded-xl bg-green-500 px-4 py-2">
-            <Text className="text-lg font-bold text-white">Login</Text>
+            <Text className="text-lg font-bold text-white">
+              {loading ? 'Signing in...' : 'Login'}
+            </Text>
           </TouchableOpacity>
 
           <Link href="/(auth)/signup" className=" mt-7 text-center font-semibold text-green-600">

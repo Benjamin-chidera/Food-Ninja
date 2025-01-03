@@ -143,7 +143,7 @@ const UserLocation = () => {
 
         <TouchableOpacity
           onPress={handleSubmit}
-          disabled={!isLocation}
+          disabled={!isLocation || loading}
           className=" mx-auto mt-10 h-16 w-40  items-center justify-center rounded-xl bg-green-500 px-4 py-2">
           <Text className="text-lg font-bold text-white">{loading ? 'Loading...' : 'Next'}</Text>
         </TouchableOpacity>

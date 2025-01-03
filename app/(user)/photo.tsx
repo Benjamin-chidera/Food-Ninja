@@ -12,7 +12,6 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { router } from 'expo-router';
 
-
 const Photo = () => {
   const platform = Platform.OS === 'android';
   // this is for selecting an image
@@ -33,7 +32,7 @@ const Photo = () => {
     //   allowsEditing: true, // enable cropping
     //   aspect: [4, 3],
     //   quality: 1,
-    // }); 
+    // });
 
     // console.log(photo);
 

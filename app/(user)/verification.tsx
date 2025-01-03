@@ -107,7 +107,9 @@ const Verification = () => {
 
         <View className="mx-6">
           <Text className="text-3xl font-bold">Enter 4-digit Verification Code</Text>
-          <Text className="my-6">Code has been sent to your email address. This code will expire in 5 minutes.</Text>
+          <Text className="my-6">
+            Code has been sent to your email address. This code will expire in 5 minutes.
+          </Text>
 
           <View className="mx-auto w-[270px] shadow shadow-blue-300 ">
             <OtpInput
