@@ -12,10 +12,12 @@ import { Switch } from '~/components/ui/switch';
 import { Label } from '~/components/ui/label';
 import { Platform } from 'react-native';
 import { EditProfile } from '~/components/profile/EditProfile';
+import { useAuthStore } from '~/store/auth-store';
 
 const App = () => {
   const platform = Platform.OS;
   const [sheetIndex, setSheetIndex] = useState(-1);
+  const { enable, setEnable } = useAuthStore();
   // hooks
   const sheetRef = useRef<BottomSheet>(null);
 
@@ -91,10 +93,15 @@ const App = () => {
             )}
 
             <View className="flex-row items-center justify-between gap-3">
-              <Label nativeID="airplane-mode" className="text-lg font-semibold text-white">
+              <Label
+                nativeID="airplane-mode"
+                className="text-lg font-semibold text-white"
+                onPress={() => {
+                  setEnable(!enable);
+                }}>
                 Enable {platform === 'ios' ? 'Face ID' : 'Fingerprint'}
               </Label>
-              <Switch nativeID="airplane-mode" />
+              <Switch nativeID="airplane-mode" checked={enable} onCheckedChange={setEnable} />
             </View>
           </View>
         </View>

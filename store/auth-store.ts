@@ -31,6 +31,9 @@ export interface AuthState {
   isLoggedIn: null | string | boolean;
   setIsLoggedIn: (isLoggedIn: null | string) => void;
 
+  enable: boolean;
+  setEnable: (enable: boolean) => void;
+
   // user data
   userData: {
     email: '';
@@ -93,6 +96,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   isLoggedIn: null,
   setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+
+  enable: false,
+  setEnable: (enable) => set({ enable }),
 
   // user data
   userData: {

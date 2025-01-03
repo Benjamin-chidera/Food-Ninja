@@ -1,8 +1,8 @@
+/* eslint-disable import/order */
 import * as React from 'react';
-import { ScrollView, View } from 'react-native';
+import { Image, ScrollView, View } from 'react-native';
 import { Button } from '~/components/ui/button';
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
@@ -14,8 +14,26 @@ import { Label } from '~/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { Text } from '~/components/ui/text';
 
+import * as ImagePicker from 'expo-image-picker';
+
 export const EditProfile = () => {
   const [value, setValue] = React.useState('account');
+
+  const [image, setImage] = React.useState<string | null>(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   return (
     <View className="">
@@ -40,6 +58,14 @@ export const EditProfile = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="native:gap-2 gap-4">
+              <View className="gap-1">
+                <Label nativeID="profilePicture">Profile Picture</Label>
+
+                <Text className="h-36 w-36 rounded-full bg-gray-200" onPress={pickImage}>
+                  {image && <Image source={{ uri: image }} className="h-36 w-36 rounded-full" />}
+                </Text>
+              </View>
+
               <View className="gap-1">
                 <Label nativeID="FirstName">FirstName</Label>
                 <Input aria-aria-labelledby="FirstName" />
