@@ -1,6 +1,7 @@
 import '../global.css';
 import { AuthProvider } from '~/store/auth-context';
-import '../global.css';
+
+import { PortalHost } from '@rn-primitives/portal';
 
 import { Stack } from 'expo-router';
 import { StatusBar, Text, View } from 'react-native';
@@ -126,6 +127,7 @@ export default function Layout() {
 
         {/* <statusbar /> */}
       </Stack>
+      <PortalHost />
     </AuthProvider>
   );
 }

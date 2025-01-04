@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 /* eslint-disable prettier/prettier */
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { router } from 'expo-router';
 import React from 'react';
 import {
@@ -18,6 +18,7 @@ import * as SecureStore from 'expo-secure-store';
 import bioImg from '../../assets/signin-bg-img.png';
 
 import { useAuthStore } from '~/store/auth-store';
+import { ErrorModal } from '~/components/modal/ErrorModal';
 
 interface ForgotPasswordResponse {
   user: string; // Adjust this to match your API's actual response structure
@@ -25,26 +26,29 @@ interface ForgotPasswordResponse {
 
 const ForgotPassword = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
-  const { email, setEmail } = useAuthStore();
+  const { email, setEmail, setError, setIsOpen, error } = useAuthStore();
 
   const handleForgotPassword = async () => {
     try {
       const { data } = await axios.post<ForgotPasswordResponse>(`${apiUrl}/auth/forgot-password`, {
         email,
       });
-  
+
       if (data.user) {
         // console.log(data.user);
-        
+
         await SecureStore.setItemAsync('token', data.user);
         setEmail('');
         router.replace('/(auth)/resetPassword');
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        console.log(error?.response?.data?.message);
+        setError(error?.response?.data?.message);
+        setIsOpen(true);
+      }
     }
   };
-  
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -76,6 +80,7 @@ const ForgotPassword = () => {
             <Text className="text-lg font-bold text-white">Forgot Password</Text>
           </TouchableOpacity>
         </View>
+        {error && <ErrorModal />}
       </View>
     </TouchableWithoutFeedback>
   );

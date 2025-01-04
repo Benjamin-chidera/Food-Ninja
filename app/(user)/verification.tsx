@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert,
 } from 'react-native';
 
 import { OtpInput } from 'react-native-otp-entry';
@@ -22,11 +21,13 @@ import { router } from 'expo-router';
 import axios, { AxiosError } from 'axios';
 
 import * as SecureStore from 'expo-secure-store';
+import { ErrorModal } from '~/components/modal/ErrorModal';
 
 const Verification = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
-  const { otp, setOtp, user, loading, setLoading, setUserData } = useAuthStore();
-  const [seconds, setSeconds] = useState(3); // Start with 5 minutes
+  const { otp, setOtp, user, loading, setLoading, setUserData, error, setError, setIsOpen } =
+    useAuthStore();
+  const [seconds, setSeconds] = useState(300); // Start with 5 minutes
   const [isResending, setIsResending] = useState(false);
 
   // console.log(userData);
@@ -61,7 +62,8 @@ const Verification = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error?.response?.data);
-        // Alert.alert('Unexpected error', error?.response?.data);
+        setError(error?.response?.data?.message);
+        setIsOpen(true);
         setLoading(false);
       }
     }
@@ -161,6 +163,8 @@ const Verification = () => {
             </Text>
           </TouchableOpacity>
         </View>
+
+        {error && <ErrorModal />}
       </View>
     </TouchableWithoutFeedback>
   );

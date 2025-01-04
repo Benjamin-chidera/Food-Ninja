@@ -24,6 +24,7 @@ import { useAuthStore } from '~/store/auth-store';
 import axios, { AxiosError } from 'axios';
 
 import * as SecureStore from 'expo-secure-store';
+import { ErrorModal } from '~/components/modal/ErrorModal';
 
 const SignIn = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
@@ -38,6 +39,9 @@ const SignIn = () => {
     setUserData,
     loading,
     setLoading,
+    isOpen,
+    setIsOpen,
+    setError,
   } = useAuthStore();
 
   const handleSignIn = async () => {
@@ -50,20 +54,21 @@ const SignIn = () => {
         password,
       });
 
-      console.log(data);
       if (data.success) {
         await SecureStore.setItemAsync('token', data.user);
         setUserData({
           email: '',
           password: '',
         });
-        
+
         setLoading(false);
         router.replace('/(tabs)');
       }
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error?.response?.data.message);
+        setError(error?.response?.data.message);
+        setIsOpen(true);
         setLoading(false);
       }
     }
@@ -155,6 +160,7 @@ const SignIn = () => {
             Don't have an account? Sign Up
           </Link>
         </View>
+        {isOpen && <ErrorModal />}
       </View>
     </TouchableWithoutFeedback>
   );

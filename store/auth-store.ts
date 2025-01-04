@@ -34,6 +34,12 @@ export interface AuthState {
   enable: boolean;
   setEnable: (enable: boolean) => void;
 
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+
+  error: string;
+  setError: (error: string) => void;
+
   // user data
   userData: {
     email: '';
@@ -99,6 +105,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   enable: false,
   setEnable: (enable) => set({ enable }),
+
+  isOpen: false,
+  setIsOpen: (isOpen) => set({ isOpen }),
+
+  error: '',
+  setError: (error) => set({ error }),
 
   // user data
   userData: {

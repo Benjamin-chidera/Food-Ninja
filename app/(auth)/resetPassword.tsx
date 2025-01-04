@@ -18,12 +18,14 @@ import * as SecureStore from 'expo-secure-store';
 import bioImg from '../../assets/signin-bg-img.png';
 
 import { useAuthStore } from '~/store/auth-store';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { router } from 'expo-router';
+import { ErrorModal } from '~/components/modal/ErrorModal';
 
 const ResetPassword = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
-  const { showPassword, setShowPassword, password, setPassword } = useAuthStore();
+  const { showPassword, setShowPassword, password, setPassword, error, setError, setIsOpen } =
+    useAuthStore();
 
   const handleResetPassword = async () => {
     const token = await SecureStore.getItemAsync('token');
@@ -35,14 +37,17 @@ const ResetPassword = () => {
       const data = await axios.patch(`${apiUrl}/auth/reset-password/${token}`, {
         password,
       });
-      console.log(data);
 
       if (data.status === 200) {
         setPassword('');
         router.replace('/(auth)/signin');
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        console.log(error?.response?.data?.message);
+        setError(error?.response?.data?.message);
+        setIsOpen(true);
+      }
     }
   };
 
@@ -82,6 +87,8 @@ const ResetPassword = () => {
             <Text className="text-lg font-bold text-white">Reset Password</Text>
           </TouchableOpacity>
         </View>
+
+        {error && <ErrorModal />}
       </View>
     </TouchableWithoutFeedback>
   );

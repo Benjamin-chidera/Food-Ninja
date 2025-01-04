@@ -1,16 +1,7 @@
 /* eslint-disable import/order */
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Pressable,
-  TextInput,
-  Platform,
-  Alert,
-} from 'react-native';
+import React from 'react';
+import { View, Text, Image, TouchableOpacity, Pressable, TextInput, Platform } from 'react-native';
 
 import bioImg from '../../assets/signin-bg-img.png';
 
@@ -18,6 +9,7 @@ import { MapPin } from 'lucide-react-native';
 import { useAuthStore } from '~/store/auth-store';
 import { router } from 'expo-router';
 import axios, { AxiosError } from 'axios';
+import { ErrorModal } from '~/components/modal/ErrorModal';
 
 const UserLocation = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
@@ -31,6 +23,15 @@ const UserLocation = () => {
     setLoading,
     userData,
     setUser,
+    error,
+    setError,
+    setIsOpen,
+    setFirstName,
+    setLastName,
+    setEmail,
+    setPhoneNumber,
+    setPhoto,
+    setPassword,
   } = useAuthStore();
   const platform = Platform.OS === 'android';
 
@@ -76,12 +77,21 @@ const UserLocation = () => {
           location: '',
           password: '',
         });
+        setEmail('');
+        setPassword('');
+        setFirstName('');
+        setLastName('');
+        setPhoneNumber('');
+        setPhoto('');
+        setLocation('');
+
         router.replace('/(user)/verification');
       }
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error?.response?.data);
-
+        setError(error?.response?.data?.message);
+        setIsOpen(true);
         setLoading(false);
       }
     }
@@ -141,6 +151,8 @@ const UserLocation = () => {
           <Text className="text-lg font-bold text-white">{loading ? 'Loading...' : 'Next'}</Text>
         </TouchableOpacity>
       </View>
+
+      {error && <ErrorModal />}
     </View>
   );
 };
