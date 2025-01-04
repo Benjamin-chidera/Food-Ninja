@@ -7,20 +7,17 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import * as SecureStore from 'expo-secure-store';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Fingerprint, Mail, MapPinPlusIcon, Phone, ScanFace } from 'lucide-react-native';
-import { Switch } from '~/components/ui/switch';
-import { Label } from '~/components/ui/label';
-import { Platform } from 'react-native';
+import { Mail, MapPinPlusIcon, Phone } from 'lucide-react-native';
 import { EditProfile } from '~/components/profile/EditProfile';
-import { useAuthStore } from '~/store/auth-store';
 import axios from 'axios';
 import useProfileStore from '~/store/profile-store';
 
+import Biometric from '~/components/profile/Biometric';
+
 const App = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
-  const platform = Platform.OS;
   const [sheetIndex, setSheetIndex] = useState(-1);
-  const { enable, setEnable } = useAuthStore();
+
   const { user, setUser } = useProfileStore();
   // hooks
   const sheetRef = useRef<BottomSheet>(null);
@@ -116,25 +113,7 @@ const App = () => {
             </View>
           </View>
 
-          <View className=" mb-5 flex-row items-center gap-3">
-            {platform === 'ios' ? (
-              <ScanFace color="white" size={24} />
-            ) : (
-              <Fingerprint color="white" size={24} />
-            )}
-
-            <View className="flex-row items-center justify-between gap-3">
-              <Label
-                nativeID="airplane-mode"
-                className="text-lg font-semibold text-white"
-                onPress={() => {
-                  setEnable(!enable);
-                }}>
-                Enable {platform === 'ios' ? 'Face ID' : 'Fingerprint'}
-              </Label>
-              <Switch nativeID="airplane-mode" checked={enable} onCheckedChange={setEnable} />
-            </View>
-          </View>
+          <Biometric />
         </View>
 
         <View className=" mb-5 mt-5 flex-row items-center justify-center gap-10">
@@ -169,7 +148,7 @@ const App = () => {
         enableDynamicSizing={false}
         onChange={handleSheetChange}>
         <BottomSheetView style={styles.contentContainer} className="relative">
-          <EditProfile getUserData={getUserData} handleClosePress={handleClosePress}/>
+          <EditProfile getUserData={getUserData} handleClosePress={handleClosePress} />
 
           <Pressable
             onPress={handleClosePress}

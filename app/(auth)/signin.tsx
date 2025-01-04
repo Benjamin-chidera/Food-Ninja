@@ -1,6 +1,8 @@
 /* eslint-disable import/order */
 /* eslint-disable prettier/prettier */
-import { Eye, EyeOff } from 'lucide-react-native';
+import React, { useEffect, useState } from 'react';
+
+import { Eye, EyeOff, Fingerprint } from 'lucide-react-native';
 import {
   View,
   Text,
@@ -14,6 +16,7 @@ import {
   Keyboard,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from 'react-native';
 import logo from '../../assets/Logo-img.png';
 import fb from '../../assets/fb.png';
@@ -26,8 +29,11 @@ import axios, { AxiosError } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { ErrorModal } from '~/components/modal/ErrorModal';
 
+import * as LocalAuthentication from 'expo-local-authentication';
+
 const SignIn = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
 
   const {
     showPassword,
@@ -42,7 +48,10 @@ const SignIn = () => {
     isOpen,
     setIsOpen,
     setError,
+    enable,
   } = useAuthStore();
+
+  console.log(enable);
 
   const handleSignIn = async () => {
     // setUserData({ email, password });
@@ -56,10 +65,8 @@ const SignIn = () => {
 
       if (data.success) {
         await SecureStore.setItemAsync('token', data.user);
-        setUserData({
-          email: '',
-          password: '',
-        });
+        setEmail('');
+        setPassword('');
 
         setLoading(false);
         router.replace('/(tabs)');
@@ -74,6 +81,43 @@ const SignIn = () => {
     }
   };
 
+  // Check if hardware supports biometrics
+  useEffect(() => {
+    (async () => {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      if (!compatible) {
+        return Alert.alert('Not supported', 'Biometric authentication not supported');
+      }
+      setIsBiometricSupported(compatible);
+    })();
+  });
+
+  const handleBiometricAuth = async () => {
+    try {
+      const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
+      if (!savedBiometrics) {
+        Alert.alert('Biometric record not found', 'Please set up biometrics on your device.');
+        return;
+      }
+
+      const biometricAuth = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Login with Biometrics',
+        disableDeviceFallback: true,
+      });
+
+      console.log('Biometric Auth Response:', biometricAuth);
+
+      if (biometricAuth.success) {
+        handleSignIn(); // Proceed with sign-in if biometrics succeed
+      } else {
+        Alert.alert('Authentication Failed', 'Please try again.');
+      }
+    } catch (error) {
+      console.error('Biometric Authentication Error:', error);
+      Alert.alert('Error', 'An error occurred during biometric authentication.');
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View className="h-full bg-white">
@@ -85,14 +129,14 @@ const SignIn = () => {
         </ImageBackground>
 
         {/* Title */}
-        <Text className="mt-6 text-center text-3xl font-bold">Login To Your Account</Text>
+        <Text className=" text-center text-3xl font-bold">Login To Your Account</Text>
 
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           //   style={{ flex: 1 }}
         >
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-            <View className="mx-7 mt-14 flex-col gap-4">
+            <View className="mx-7 mt-9 flex-col gap-4">
               {/* Email Input */}
               <TextInput
                 className="h-[57px] rounded-2xl border px-5 placeholder:text-blue-400"
@@ -143,6 +187,14 @@ const SignIn = () => {
             <Text className=" text-lg font-bold">Google</Text>
           </TouchableOpacity>
         </View>
+
+        {/* {enable && (
+          <View className=" mx-7 my-5 items-center justify-center">
+            <TouchableOpacity onPress={handleBiometricAuth}>
+              <Fingerprint color="green" size={40} />
+            </TouchableOpacity>
+          </View>
+        )} */}
 
         <View className="absolute bottom-10 left-6 right-6">
           {/* <AuthButton title="Login" screen={''} /> */}

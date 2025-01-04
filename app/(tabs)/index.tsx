@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Bell, FilterIcon, Search } from 'lucide-react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -18,9 +18,59 @@ import heroImg from '~/assets/hero-img.png';
 import NearestRestaurant from '~/components/home/near-restaurant/nearest-restaurant';
 import PopularMenu from '~/components/home/popular-menu/popular-menu';
 
+import { io } from 'socket.io-client';
+
+import axios from 'axios';
+
+type FoodProps = {
+  _id: string;
+  name: string;
+  description: string;
+  price: number | string | any;
+  image: string;
+  tags: string[];
+};
+
 const Home = () => {
+  const socket = io('http://192.168.0.21:3000');
   const platform = Platform.OS === 'android';
   const getCurrentMonth = new Date().toLocaleString('default', { month: 'long' });
+
+  const [foods, setFoods] = useState<FoodProps[]>([]);
+
+  console.log(foods);
+
+  // Fetch the food items from the API on component mount
+  useEffect(() => {
+    const fetchFoods = async () => {
+      try {
+        // Make the GET request using axios
+        const { data } = await axios.get(
+          'http://192.168.0.21:3000/api/v1/food-ninja/food/all-food'
+        );
+
+        // Assuming the response data contains an array of food items in 'data.foodItems'
+        setFoods(data.foods);
+      } catch (error) {
+        console.error('Error fetching food items:', error);
+      }
+    };
+
+    fetchFoods();
+
+    // Listen for real-time updates from Socket.IO
+    socket.on('newFoodCreated', (food) => {
+      console.log('New food received:', food);
+
+      // Update the food list with the new food
+      setFoods((prevFoods) => [...prevFoods, food]);
+    });
+
+    // Clean up the socket connection on component unmount
+    return () => {
+      socket.off('newFoodCreated');
+    };
+  }, []);
 
   return (
     <SafeAreaView className={`p-5 ${platform && 'pr-5'}`}>
@@ -78,7 +128,7 @@ const Home = () => {
         {/* Nearest restaurant */}
 
         {/* Popular menu */}
-        <PopularMenu />
+        <PopularMenu foods={foods} />
         {/* Popular menu */}
       </ScrollView>
     </SafeAreaView>
