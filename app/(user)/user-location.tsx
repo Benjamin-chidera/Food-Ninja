@@ -14,12 +14,10 @@ import {
 
 import bioImg from '../../assets/signin-bg-img.png';
 
-
 import { MapPin } from 'lucide-react-native';
 import { useAuthStore } from '~/store/auth-store';
 import { router } from 'expo-router';
 import axios, { AxiosError } from 'axios';
-
 
 const UserLocation = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
@@ -32,13 +30,9 @@ const UserLocation = () => {
     loading,
     setLoading,
     userData,
-    user,
     setUser,
   } = useAuthStore();
   const platform = Platform.OS === 'android';
-
-  console.log(userData);
-  
 
   const handleSubmit = async () => {
     setUserData({ location });
@@ -72,16 +66,15 @@ const UserLocation = () => {
         setUser(data.user);
 
         console.log(data);
-        
 
         setUserData({
-          email: '',
-          password: '',
           firstName: '',
           lastName: '',
+          email: '',
           phoneNumber: '',
           photo: '',
           location: '',
+          password: '',
         });
         router.replace('/(user)/verification');
       }

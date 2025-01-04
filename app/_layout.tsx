@@ -1,4 +1,4 @@
-import "../global.css";
+import '../global.css';
 import { AuthProvider } from '~/store/auth-context';
 import '../global.css';
 
@@ -41,6 +41,12 @@ export default function Layout() {
         />
         <Stack.Screen
           name="(auth)/forgotPassword"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(auth)/resetPassword"
           options={{
             headerShown: false,
           }}

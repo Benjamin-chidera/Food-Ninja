@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
@@ -24,7 +25,7 @@ import * as SecureStore from 'expo-secure-store';
 
 const Verification = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
-  const { otp, setOtp, userData, user, loading, setLoading } = useAuthStore();
+  const { otp, setOtp, user, loading, setLoading, setUserData } = useAuthStore();
   const [seconds, setSeconds] = useState(3); // Start with 5 minutes
   const [isResending, setIsResending] = useState(false);
 
@@ -42,10 +43,19 @@ const Verification = () => {
 
       if (data.success) {
         setLoading(false);
+        await SecureStore.setItemAsync('token', data.user);
+        setUserData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNumber: '',
+          photo: '',
+          location: '',
+          password: '',
+        });
         router.replace('/(user)/success-msg');
 
         // console.log(data.success);
-        await SecureStore.setItemAsync('token', data.user);
       }
       // Alert.alert(data.message, 'You can now login to your account');
     } catch (error) {

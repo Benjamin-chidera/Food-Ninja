@@ -1,6 +1,6 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable import/order */
-import React, { useCallback, useRef, useMemo, useState } from 'react';
+import React, { useCallback, useRef, useMemo, useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
@@ -13,13 +13,19 @@ import { Label } from '~/components/ui/label';
 import { Platform } from 'react-native';
 import { EditProfile } from '~/components/profile/EditProfile';
 import { useAuthStore } from '~/store/auth-store';
+import axios from 'axios';
+import useProfileStore from '~/store/profile-store';
 
 const App = () => {
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
   const platform = Platform.OS;
   const [sheetIndex, setSheetIndex] = useState(-1);
   const { enable, setEnable } = useAuthStore();
+  const { user, setUser } = useProfileStore();
   // hooks
   const sheetRef = useRef<BottomSheet>(null);
+
+  // console.log(apiUrl);
 
   // variables
   const snapPoints = useMemo(() => ['90%'], []);
@@ -45,19 +51,44 @@ const App = () => {
     router.replace('/(auth)/signin');
   };
 
-  // render
+  const getUserData = async () => {
+    try {
+      const token = await SecureStore.getItemAsync('token');
+      if (!token) {
+        return console.log('User not found');
+      }
+
+      const { data } = await axios.get(`${apiUrl}/auth/user/${token}`);
+      setUser(data.user);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  // console.log(user);
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  const getYear = new Date(user?.createdAt).getFullYear();
+
+  // console.log(getYear);
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaView className="bg-white px-3">
         <View className=" mb-10 items-center justify-center">
           <Image
             source={{
-              uri: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600',
+              uri: user?.photo,
             }}
             className="h-36 w-36 rounded-full object-top"
           />
-          <Text className=" mt-2 text-2xl font-bold">Sarah Johnson</Text>
-          <Text className="mt-1 text-gray-500">Member since 2021</Text>
+          <Text className=" mt-2 text-2xl font-bold">
+            {user?.firstName} {user?.lastName}
+          </Text>
+          <Text className="mt-1 text-gray-500">Member since {getYear}</Text>
         </View>
 
         <View className=" rounded-lg bg-green-500 p-5">
@@ -65,7 +96,7 @@ const App = () => {
             <Mail color="white" size={24} />
             <View>
               <Text className=" text-white">Email</Text>
-              <Text className=" text-lg font-semibold text-white">johnson@example.com</Text>
+              <Text className=" text-lg font-semibold text-white">{user?.email}</Text>
             </View>
           </View>
 
@@ -73,7 +104,7 @@ const App = () => {
             <Phone color="white" size={24} />
             <View>
               <Text className=" text-white">Phone</Text>
-              <Text className=" text-lg font-semibold text-white">johnson@example.com</Text>
+              <Text className=" text-lg font-semibold text-white">{user?.phoneNumber}</Text>
             </View>
           </View>
 
@@ -81,7 +112,7 @@ const App = () => {
             <MapPinPlusIcon color="white" size={24} />
             <View>
               <Text className=" text-white">Default Address</Text>
-              <Text className=" text-lg font-semibold text-white">123 Main St, Anytown USA</Text>
+              <Text className=" text-lg font-semibold text-white">{user?.location}</Text>
             </View>
           </View>
 
@@ -138,7 +169,7 @@ const App = () => {
         enableDynamicSizing={false}
         onChange={handleSheetChange}>
         <BottomSheetView style={styles.contentContainer} className="relative">
-          <EditProfile />
+          <EditProfile getUserData={getUserData} handleClosePress={handleClosePress}/>
 
           <Pressable
             onPress={handleClosePress}

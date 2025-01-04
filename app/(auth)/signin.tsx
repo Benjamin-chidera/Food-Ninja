@@ -41,7 +41,7 @@ const SignIn = () => {
   } = useAuthStore();
 
   const handleSignIn = async () => {
-    setUserData({ email, password });
+    // setUserData({ email, password });
     setLoading(true);
 
     try {
@@ -50,13 +50,15 @@ const SignIn = () => {
         password,
       });
 
+      console.log(data);
       if (data.success) {
-        setLoading(false);
         await SecureStore.setItemAsync('token', data.user);
         setUserData({
           email: '',
           password: '',
         });
+        
+        setLoading(false);
         router.replace('/(tabs)');
       }
     } catch (error) {
@@ -100,7 +102,7 @@ const SignIn = () => {
                 <TextInput
                   className="h-[57px] rounded-2xl border px-5 pr-10 placeholder:text-blue-400"
                   placeholder="Password"
-                  secureTextEntry={showPassword ? false : true}
+                  secureTextEntry={!showPassword}
                   value={password}
                   onChangeText={setPassword}
                 />
