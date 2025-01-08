@@ -18,6 +18,17 @@ const PopularMenuLayout = () => {
           headerLargeTitleShadowVisible: false,
         }}
       />
+
+      {/* this is for the popular menu id */}
+
+      <Stack.Screen
+        name="[id]"
+        options={{
+          headerTransparent: true,
+          headerShown: false,
+        }}
+      />
+      {/* this is for the popular menu id */}
     </Stack>
   );
 };

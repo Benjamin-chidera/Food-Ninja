@@ -1,12 +1,14 @@
 import { Link } from 'expo-router';
 import React from 'react';
-import { View, Text, Platform, FlatList, Image } from 'react-native';
+import { View, Text, Platform, FlatList, Image, Pressable } from 'react-native';
+import { useFoodStore } from '~/store/food';
 
 const NearestRestaurant = () => {
+  const { foods } = useFoodStore();
   const restaurant = [
     {
       id: '1',
-      name: 'Chicken Republic',
+      name: 'chicken-republic',
       image:
         'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
@@ -27,7 +29,7 @@ const NearestRestaurant = () => {
     },
     {
       id: '4',
-      name: 'Tastee',
+      name: 'tastee',
       image:
         'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
@@ -39,7 +41,20 @@ const NearestRestaurant = () => {
         'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
+    {
+      id: '6',
+      name: 'Dominons',
+      image:
+        'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=600',
+      location: 'Lagos',
+    },
   ];
+
+  const handlePress = (name) => {
+    const getfoods = foods.filter((food) => food.restaurant === name);
+
+    console.log(getfoods);
+  };
 
   const platform = Platform.OS === 'android';
   return (
@@ -59,6 +74,9 @@ const NearestRestaurant = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View className=" rounded-xl bg-white p-3">
+            <Pressable onPress={() => handlePress(item.name)}>
+              <Text>me</Text>
+            </Pressable>
             <Image source={{ uri: item.image }} className=" h-40 w-40 rounded-md" />
 
             <Text className="mt-5 text-center text-lg font-semibold">{item.name}</Text>

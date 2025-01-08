@@ -6,7 +6,7 @@ type FoodType = {
   _id: string;
   image: string;
   name: string;
-  restaurantName?: string;
+  restaurant?: string;
   price: string;
 };
 
@@ -30,17 +30,21 @@ const PopularMenu = ({ foods }: PopularMenuProps) => {
 
       <FlatList
         data={foods}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item?._id}
         renderItem={({ item }) => (
-          <View className=" flex-row items-center gap-4 rounded-xl bg-white p-3">
-            <Image source={{ uri: item.image }} className=" h-20 w-20 rounded-md" />
+          <Link href={`/(popular-menu)/${item?._id}`}>
+            <View className=" flex-row items-center gap-4 rounded-xl bg-white p-3">
+              <Image source={{ uri: item?.image }} className=" h-20 w-20 rounded-md " />
 
-            <View>
-              <Text className=" text-lg font-semibold">{item.name}</Text>
-              <Text className=" text-sm text-gray-500">{item.restaurantName || 'KFC'}</Text>
-              <Text className=" text-xl font-bold text-green-600">{item.price}</Text>
+              <View>
+                <Text className=" text-lg font-semibold">{item?.name}</Text>
+                <Text className=" text-sm text-gray-500" numberOfLines={1}>
+                  {item?.restaurant}
+                </Text>
+                <Text className=" text-xl font-bold text-green-600">{item?.price}</Text>
+              </View>
             </View>
-          </View>
+          </Link>
         )}
         contentContainerClassName="gap-5 mt-5"
         horizontal

@@ -1,6 +1,8 @@
+/* eslint-disable import/order */
 /* eslint-disable prettier/prettier */
+import axios from 'axios';
 import { Bell, FilterIcon, Search } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,41 +15,32 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { io } from 'socket.io-client';
 import heroFish from '~/assets/hero-fish.png';
 import heroImg from '~/assets/hero-img.png';
 import NearestRestaurant from '~/components/home/near-restaurant/nearest-restaurant';
 import PopularMenu from '~/components/home/popular-menu/popular-menu';
 
-import { io } from 'socket.io-client';
-
-import axios from 'axios';
-
-type FoodProps = {
-  _id: string;
-  name: string;
-  description: string;
-  price: number | string | any;
-  image: string;
-  tags: string[];
-};
+import { useFoodStore } from '~/store/food';
 
 const Home = () => {
-  const socket = io('http://192.168.0.21:3000');
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
+  // const socket = io('http://192.168.0.21:3000');
+  const socket = io('http://10.230.64.53:3000');
   const platform = Platform.OS === 'android';
   const getCurrentMonth = new Date().toLocaleString('default', { month: 'long' });
+  const { foods: food, setFoods } = useFoodStore();
 
-  const [foods, setFoods] = useState<FoodProps[]>([]);
+  // console.log();
 
-  console.log(foods);
+  const foods = Array.isArray(food) ? food.slice(0, 6) : [];
 
   // Fetch the food items from the API on component mount
   useEffect(() => {
     const fetchFoods = async () => {
       try {
         // Make the GET request using axios
-        const { data } = await axios.get(
-          'http://192.168.0.21:3000/api/v1/food-ninja/food/all-food'
-        );
+        const { data } = await axios.get(`${apiUrl}/food/all-food`);
 
         // Assuming the response data contains an array of food items in 'data.foodItems'
         setFoods(data.foods);
@@ -63,7 +56,7 @@ const Home = () => {
       console.log('New food received:', food);
 
       // Update the food list with the new food
-      setFoods((prevFoods) => [...prevFoods, food]);
+      setFoods((prevFoods: any) => [...prevFoods, food]);
     });
 
     // Clean up the socket connection on component unmount
