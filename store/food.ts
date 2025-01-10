@@ -16,6 +16,9 @@ interface FoodState {
 
   foodDetails: FoodProps | null;
   setFoodDetails: (foodDetails: FoodProps | null) => void;
+
+  nearestRestaurant: FoodProps[];
+  setNearestRestaurant: (nearestRestaurant: FoodProps[]) => void;
 }
 
 export const useFoodStore = create<FoodState>((set) => ({
@@ -24,4 +27,7 @@ export const useFoodStore = create<FoodState>((set) => ({
 
   foodDetails: null,
   setFoodDetails: (foodDetails) => set({ foodDetails }),
+
+  nearestRestaurant: [],
+  setNearestRestaurant: (nearestRestaurant) => set({ nearestRestaurant }),
 }));

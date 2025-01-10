@@ -53,7 +53,7 @@ const Home = () => {
 
     // Listen for real-time updates from Socket.IO
     socket.on('newFoodCreated', (food) => {
-      console.log('New food received:', food);
+      // console.log('New food received:', food);
 
       // Update the food list with the new food
       setFoods((prevFoods: any) => [...prevFoods, food]);

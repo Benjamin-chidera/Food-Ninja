@@ -1,8 +1,13 @@
 import { View, Text } from 'react-native';
 import React from 'react';
-import { Stack } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
 const NearestRestaurantStackLayout = () => {
+  const { name } = useLocalSearchParams();
+
+  console.log(name);
+  
+
   return (
     <Stack>
       <Stack.Screen
@@ -16,6 +21,15 @@ const NearestRestaurantStackLayout = () => {
             fontWeight: 'bold',
           },
           headerLargeTitleShadowVisible: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="[name]"
+        options={{
+          headerTransparent: true,
+          headerTitle: `Favorite Restaurants`,
+          headerLargeTitle: true,
         }}
       />
     </Stack>

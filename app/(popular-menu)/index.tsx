@@ -19,7 +19,7 @@ const PopularMenu = () => {
   const { foods } = useFoodStore();
 
   return (
-    <SafeAreaView className=" mt-10 p-5">
+    <SafeAreaView className="mt-10 p-5 ">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
         <View className={`${platform.OS === 'ios' ? 'mt-14' : 'mt-5'}`}>

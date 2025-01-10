@@ -2,6 +2,7 @@ import { View, Text, ScrollView, TextInput, Image, Platform } from 'react-native
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search } from 'lucide-react-native';
+import { Link } from 'expo-router';
 
 const MoreRestaurants = () => {
   const platform = Platform;
@@ -9,70 +10,42 @@ const MoreRestaurants = () => {
   const restaurant = [
     {
       id: '1',
-      name: 'Chicken Republic',
+      name: 'chicken-republic',
       image:
         'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
     {
       id: '2',
-      name: 'The Place',
+      name: 'the-place',
       image:
         'https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
     {
       id: '3',
-      name: 'KFC',
+      name: 'kfc',
       image:
         'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
     {
       id: '4',
-      name: 'Tastee',
+      name: 'tastee',
       image:
         'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
     {
       id: '5',
-      name: 'Sweet Sensation',
+      name: 'sweet-sensation',
       image:
         'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
     {
       id: '6',
-      name: 'Chicken Republic',
-      image:
-        'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=600',
-      location: 'Lagos',
-    },
-    {
-      id: '7',
-      name: 'The Place',
-      image:
-        'https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=600',
-      location: 'Lagos',
-    },
-    {
-      id: '8',
-      name: 'KFC',
-      image:
-        'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=600',
-      location: 'Lagos',
-    },
-    {
-      id: '9',
-      name: 'Tastee',
-      image:
-        'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=600',
-      location: 'Lagos',
-    },
-    {
-      id: '10',
-      name: 'Sweet Sensation',
+      name: 'dominons',
       image:
         'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
@@ -97,13 +70,17 @@ const MoreRestaurants = () => {
         </View>
         {/* Search Bar */}
 
-        <View className=" flex-row flex-wrap justify-center gap-4 ">
+        <View className=" mt-5 flex-row flex-wrap justify-center gap-4 ">
           {restaurant.map((r) => (
-            <View className="mt-7 gap-2  rounded-xl bg-white p-3" key={r?.id}>
-              <Image source={{ uri: r?.image }} className="h-36 w-40" />
-              <Text className=" text-center text-lg font-semibold">{r?.name}</Text>
-              <Text className=" text-center text-sm text-gray-500">{r?.location}</Text>
-            </View>
+            <Link key={r?.id} href={`/(nearest-restaurant)/${r.name}`}>
+              <View className="mt-7 gap-2  rounded-xl bg-white p-3">
+                <Image source={{ uri: r?.image }} className="h-36 w-40" />
+                <Text className=" text-center text-lg font-semibold">
+                  {r?.name.replace('-', ' ').toUpperCase()}
+                </Text>
+                <Text className=" text-center text-sm text-gray-500">{r?.location}</Text>
+              </View>
+            </Link>
           ))}
         </View>
       </ScrollView>

@@ -4,7 +4,6 @@ import { View, Text, Platform, FlatList, Image, Pressable } from 'react-native';
 import { useFoodStore } from '~/store/food';
 
 const NearestRestaurant = () => {
-  const { foods } = useFoodStore();
   const restaurant = [
     {
       id: '1',
@@ -15,14 +14,14 @@ const NearestRestaurant = () => {
     },
     {
       id: '2',
-      name: 'The Place',
+      name: 'the-place',
       image:
         'https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
     {
       id: '3',
-      name: 'KFC',
+      name: 'kfc',
       image:
         'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
@@ -36,25 +35,19 @@ const NearestRestaurant = () => {
     },
     {
       id: '5',
-      name: 'Sweet Sensation',
+      name: 'sweet-sensation',
       image:
         'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
     {
       id: '6',
-      name: 'Dominons',
+      name: 'dominons',
       image:
         'https://images.pexels.com/photos/696218/pexels-photo-696218.jpeg?auto=compress&cs=tinysrgb&w=600',
       location: 'Lagos',
     },
   ];
-
-  const handlePress = (name) => {
-    const getfoods = foods.filter((food) => food.restaurant === name);
-
-    console.log(getfoods);
-  };
 
   const platform = Platform.OS === 'android';
   return (
@@ -73,15 +66,18 @@ const NearestRestaurant = () => {
         data={restaurant}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View className=" rounded-xl bg-white p-3">
-            <Pressable onPress={() => handlePress(item.name)}>
-              <Text>me</Text>
-            </Pressable>
-            <Image source={{ uri: item.image }} className=" h-40 w-40 rounded-md" />
+          <Link href={`/(nearest-restaurant)/${item.name}`}>
+            <View className=" rounded-xl bg-white p-3">
+              {/* <Pressable onPress={() => handlePress(item.name)}> */}
+              <Image source={{ uri: item.image }} className=" h-40 w-40 rounded-md" />
 
-            <Text className="mt-5 text-center text-lg font-semibold">{item.name}</Text>
-            <Text className=" text-center text-sm text-gray-500">{item.location}</Text>
-          </View>
+              <Text className="mt-5 text-center text-lg font-semibold capitalize">
+                {item.name.replace('-', ' ')}
+              </Text>
+              <Text className=" text-center text-sm text-gray-500">{item.location}</Text>
+              {/* </Pressable> */}
+            </View>
+          </Link>
         )}
         contentContainerClassName="gap-5 mt-5"
         horizontal
