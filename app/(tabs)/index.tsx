@@ -1,6 +1,7 @@
 /* eslint-disable import/order */
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
+import { Link } from 'expo-router';
 import { Bell, FilterIcon, Search } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import {
@@ -108,9 +109,9 @@ const Home = () => {
                 Special Deal for {getCurrentMonth}
               </Text>
 
-              <Pressable className="mt-3 w-[100px] rounded-lg bg-white p-3">
+              <Link href="/(popular-menu)" className="mt-3 w-[100px] rounded-lg bg-white p-3">
                 <Text className="text-center font-bold text-green-500">Buy Now</Text>
-              </Pressable>
+              </Link>
             </View>
           </ImageBackground>
         </View>
