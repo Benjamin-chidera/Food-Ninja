@@ -4,11 +4,15 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { SplashScreen } from 'expo-router';
 
 import * as SecureStore from 'expo-secure-store';
+import { FoodProps, useFoodStore } from './food';
+import axios from 'axios';
 
-type AuthProps = {
+export type AuthProps = {
   isLoggedIn?: string | null | boolean;
   isLoading?: boolean;
   hasCompletedOnboarding?: boolean;
+  favorites: FoodProps[];
+  getFavorite: () => void;
 };
 
 const AuthContext = createContext<AuthProps | null>(null);
@@ -20,6 +24,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
 
+  // add to fav
+  const { favorites, setFavorites } = useFoodStore();
+
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
@@ -27,7 +34,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const onboardingComplete = await SecureStore.getItemAsync('onboarding');
 
         console.log(token);
-        
 
         setIsLoggedIn(!!token); // Update isLoggedIn based on token existence
         setHasCompletedOnboarding(!!onboardingComplete);
@@ -42,12 +48,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkLoginStatus();
   }, []);
 
+  // this is for add to favorites
+
+  const getFavorite = async () => {
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
+    try {
+      const token = await SecureStore.getItemAsync('token');
+      if (!token) {
+        return console.log('User not found');
+      }
+
+      const { data } = await axios(`${apiUrl}/food/get-all-favorite/${token}`);
+
+      setFavorites(data.favoriteFoods);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getFavorite();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
         isLoading,
         isLoggedIn,
         hasCompletedOnboarding,
+        favorites,
+        getFavorite,
       }}>
       {children}
     </AuthContext.Provider>

@@ -8,6 +8,7 @@ export interface FoodProps {
   image: string;
   tags: string[];
   restaurant: string;
+  isFavorite?: boolean;
 }
 
 interface FoodState {
@@ -19,6 +20,17 @@ interface FoodState {
 
   nearestRestaurant: FoodProps[];
   setNearestRestaurant: (nearestRestaurant: FoodProps[]) => void;
+
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+
+  isFavorite: boolean;
+  setIsFavorite: (isFavorite: boolean) => void;
+
+  favorites: FoodProps[];
+  setFavorites: (favorites: FoodProps[]) => void;
+
+  toggleFavorite: (foodId: string) => void;
 }
 
 export const useFoodStore = create<FoodState>((set) => ({
@@ -30,4 +42,23 @@ export const useFoodStore = create<FoodState>((set) => ({
 
   nearestRestaurant: [],
   setNearestRestaurant: (nearestRestaurant) => set({ nearestRestaurant }),
+
+  loading: false,
+  setLoading: (loading) => set({ loading }),
+
+  isFavorite: false,
+  setIsFavorite: (isFavorite) => set({ isFavorite }),
+
+  favorites: [],
+  setFavorites: (favorites) => set({ favorites }),
+
+  toggleFavorite: (foodId: string) =>
+    set((state) => {
+      const updatedFoodDetails = state.foodDetails;
+      if (updatedFoodDetails && updatedFoodDetails._id === foodId) {
+        updatedFoodDetails.isFavorite = !updatedFoodDetails.isFavorite;
+        return { foodDetails: updatedFoodDetails };
+      }
+      return {};
+    }),
 }));

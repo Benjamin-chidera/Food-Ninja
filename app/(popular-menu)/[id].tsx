@@ -1,22 +1,34 @@
+/* eslint-disable import/order */
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { useFoodStore } from '~/store/food';
-import { Heart } from 'lucide-react-native';
 import { Button } from '~/components/ui/button';
+
+import * as SecureStore from 'expo-secure-store';
+import { useAuth } from '~/store/auth-context';
+import AddToFav from '~/components/buttons/add-to-fav';
 
 const PopularMenuId = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
   const { id } = useLocalSearchParams();
-  const { foodDetails, setFoodDetails } = useFoodStore();
-  console.log(id);
+  const {
+    foodDetails,
+    setFoodDetails,
+    loading,
+    setLoading,
+    isFavorite,
+    setIsFavorite,
+    toggleFavorite,
+  } = useFoodStore();
+
+  const { getFavorite } = useAuth();
 
   const getFoodById = async () => {
     try {
       const { data } = await axios(`${apiUrl}/food/food/${id}`);
 
-      console.log(data);
       setFoodDetails(data.food);
     } catch (error) {
       console.log(error);
@@ -26,13 +38,41 @@ const PopularMenuId = () => {
     getFoodById();
   }, [id]);
 
+  // this is for add to fav
+  const handleAddToFav = async () => {
+    if (loading || foodDetails?.isFavorite) return;
+    setLoading(true);
+    try {
+      const token = await SecureStore.getItemAsync('token');
+      if (!token) {
+        return console.log('User not found');
+      }
+      const { data } = await axios.post(`${apiUrl}/food/add-to-favorite`, {
+        foodId: foodDetails?._id,
+        userId: token,
+      });
+
+      if (data) {
+        console.log(data);
+        setLoading(false);
+        toggleFavorite(foodDetails?._id);
+        getFavorite();
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setIsFavorite(false);
+    }
+  };
+
   return (
     <View className=" relative flex-1">
       <View className=" relative">
         <Image source={{ uri: foodDetails?.image }} className="h-72 w-full" />
-        <TouchableOpacity className=" absolute bottom-2 right-2 rounded-full bg-white p-2">
-          <Heart color="green" />
-        </TouchableOpacity>
+
+        <View>
+          <AddToFav isFavorite={isFavorite} handleAddToFav={handleAddToFav} loading={loading} />
+        </View>
       </View>
 
       <ScrollView className=" p-3">
