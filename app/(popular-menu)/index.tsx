@@ -19,7 +19,7 @@ const PopularMenu = () => {
   const { foods } = useFoodStore();
 
   return (
-    <SafeAreaView className="mt-10 p-5 ">
+    <SafeAreaView className="mt-10">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
         <View className={`${platform.OS === 'ios' ? 'mt-14' : 'mt-5'}`}>
@@ -36,10 +36,10 @@ const PopularMenu = () => {
         </View>
         {/* Search Bar */}
 
-        <View className=" mt-5 flex-row flex-wrap justify-center  gap-4">
+        <View className=" mx-5 mt-3 flex-row flex-wrap gap-4">
           {foods.map((r) => (
             <Link href={`/(popular-menu)/${r?._id}`} key={r?._id}>
-              <View className="relative mt-7  w-48 gap-2 rounded-xl bg-white p-3">
+              <View className="relative w-48 gap-2 rounded-xl bg-white p-3">
                 <Image source={{ uri: r?.image }} className="h-36 w-40" />
                 <Text className=" text-center text-lg font-semibold">{r?.name}</Text>
                 <Text className=" text-center text-sm text-gray-500">{r?.restaurant}</Text>

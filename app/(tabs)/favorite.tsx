@@ -1,14 +1,12 @@
-import { View, Text, Image } from 'react-native';
-import React, { useState } from 'react';
-
 import axios from 'axios';
-import { useFoodStore } from '~/store/food';
-
-import { useAuth } from '~/store/auth-context';
-import RemoveFav from '~/components/buttons/remove-fav';
-
-import * as SecureStore from 'expo-secure-store';
 import { Link } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
+import React, { useState } from 'react';
+import { View, Text, Image } from 'react-native';
+
+import RemoveFav from '~/components/buttons/remove-fav';
+import { useAuth } from '~/store/auth-context';
+import { useFoodStore } from '~/store/food';
 
 const Favorite = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
@@ -63,9 +61,9 @@ const Favorite = () => {
 
   return (
     <View>
-      <View className="mt-5 flex-row flex-wrap justify-center gap-4">
+      <View className=" mx-5 mt-3 flex-row flex-wrap gap-4">
         {favorites.map((r) => (
-          <View className="relative mt-7 w-48 gap-2 rounded-xl bg-white p-3" key={r._id}>
+          <View className="relative  w-48 gap-2 rounded-xl bg-white p-3" key={r._id}>
             <Link href={`/(popular-menu)/${r?._id}`}>
               <Image source={{ uri: r?.image }} className="h-36 w-40" />
             </Link>

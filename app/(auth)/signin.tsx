@@ -64,6 +64,7 @@ const SignIn = () => {
       });
 
       if (data.success) {
+        console.log(data);
         await SecureStore.setItemAsync('token', data.user);
         setEmail('');
         setPassword('');

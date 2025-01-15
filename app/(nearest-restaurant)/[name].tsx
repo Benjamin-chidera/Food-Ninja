@@ -26,7 +26,7 @@ const EachRestaurant = () => {
 
   return (
     <View>
-      <SafeAreaView className="p-5 ">
+      <SafeAreaView className="">
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Search Bar */}
           <View className={`${platform.OS === 'ios' ? 'mt-5' : 'mt-5'}`}>
@@ -43,7 +43,7 @@ const EachRestaurant = () => {
           </View>
           {/* Search Bar */}
 
-          <View className=" mt-5 flex-row flex-wrap justify-center  gap-4">
+          <View className=" mx-5 mt-3 flex-row flex-wrap gap-4">
             {nearestRestaurant.map((r) => (
               <Link href={`/(popular-menu)/${r?._id}`} key={r?._id}>
                 <View className="relative mt-7  w-48 gap-2 rounded-xl bg-white p-3">

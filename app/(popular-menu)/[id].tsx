@@ -9,6 +9,7 @@ import { Button } from '~/components/ui/button';
 import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '~/store/auth-context';
 import AddToFav from '~/components/buttons/add-to-fav';
+import { useCartStore } from '~/store/cart';
 
 const PopularMenuId = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
@@ -24,6 +25,8 @@ const PopularMenuId = () => {
   } = useFoodStore();
 
   const { getFavorite } = useAuth();
+
+  const { quantity, setQuantity } = useCartStore();
 
   const getFoodById = async () => {
     try {
@@ -65,6 +68,21 @@ const PopularMenuId = () => {
     }
   };
 
+  const addToCart = async (id: string) => {
+    try {
+      console.log('Adding', id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDecrease = () => {
+    if (quantity < 1) {
+      return;
+    }
+    setQuantity(quantity - 1);
+  };
+
   return (
     <View className=" relative flex-1">
       <View className=" relative">
@@ -82,11 +100,11 @@ const PopularMenuId = () => {
 
           {/* this is for controlling the quantity of the food item */}
           <View className=" flex-row items-center gap-5">
-            <Button className=" bg-green-500">
+            <Button className=" bg-green-500" onPress={() => setQuantity(quantity + 1)}>
               <Text className=" text-2xl text-white">+</Text>
             </Button>
-            <Text>0</Text>
-            <Button className=" bg-green-500">
+            <Text>{quantity}</Text>
+            <Button className=" bg-green-500" onPress={handleDecrease}>
               <Text className=" text-2xl text-white">-</Text>
             </Button>
           </View>
@@ -104,7 +122,9 @@ const PopularMenuId = () => {
 
       {/* this is the button for adding the food item to the cart */}
       <View className="  absolute bottom-0 w-full">
-        <TouchableOpacity className="h-20  items-center justify-center bg-green-500 p-2">
+        <TouchableOpacity
+          className="h-20  items-center justify-center bg-green-500 p-2"
+          onPress={() => addToCart(foodDetails?._id)}>
           <Text className=" text-center">Add to cart</Text>
         </TouchableOpacity>
       </View>
