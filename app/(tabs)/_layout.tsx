@@ -4,10 +4,12 @@ import { Tabs } from 'expo-router';
 import { Heart, House, MessageCircle, ShoppingCart, User } from 'lucide-react-native';
 import React from 'react';
 import { View, Text } from 'react-native';
+import { useCartStore } from '~/store/cart';
 import { useFoodStore } from '~/store/food';
 
 const TabsLayout = () => {
   const { favorites } = useFoodStore();
+  const { cart } = useCartStore();
 
   return (
     <Tabs>
@@ -42,7 +44,16 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="cart"
         options={{
-          tabBarIcon: ({ color, size }) => <ShoppingCart color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <View className=" relative">
+              <ShoppingCart color={color} size={size} />
+              {cart.length > 0 && (
+                <Text className=" absolute -top-2.5 right-2 rounded-full text-sm  text-red-500">
+                  {cart?.length}
+                </Text>
+              )}
+            </View>
+          ),
         }}
       />
       <Tabs.Screen

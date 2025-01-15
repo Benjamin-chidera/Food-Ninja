@@ -22,6 +22,9 @@ interface CartState {
 
   quantity: number;
   setQuantity: (quantity: number) => void;
+
+  isInCart: boolean;
+  setIsInCart: (isInCart: boolean) => void;
 }
 
 export const useCartStore = create<CartState>((set) => ({
@@ -36,4 +39,7 @@ export const useCartStore = create<CartState>((set) => ({
 
   quantity: 0,
   setQuantity: (quantity: number) => set({ quantity }),
+
+  isInCart: false,
+  setIsInCart: (isInCart: boolean) => set({ isInCart }),
 }));
