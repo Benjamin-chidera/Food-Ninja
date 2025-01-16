@@ -54,6 +54,8 @@ const TabsLayout = () => {
               )}
             </View>
           ),
+
+          headerShown: false,
         }}
       />
       <Tabs.Screen

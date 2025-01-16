@@ -1,7 +1,11 @@
+/* eslint-disable import/order */
 import { createContext, ReactNode, useContext, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { useCartStore } from './cart';
 import axios from 'axios';
+
+import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert';
+import { ShoppingCart } from 'lucide-react-native';
 
 type CartProps = {
   quantity: number;
@@ -17,9 +21,10 @@ export const useGlobalCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
-  const { quantity, setQuantity, isInCart, setIsInCart, setCart } = useCartStore();
+  const { quantity, setQuantity, isInCart, setIsInCart, setCart, setLoading } = useCartStore();
 
   const getCart = async () => {
+    setLoading(true);
     try {
       const token = await SecureStore.getItemAsync('token');
       if (!token) {
@@ -28,14 +33,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
       const { data } = await axios(`${apiUrl}/cart/get-cart/${token}`);
       if (data.success) {
-        console.log(data.cart.items);
+        // console.log(data.cart.items);
         // const check = data.cart.items.some((item: any) => item.food._id === id);
         // setIsInCart(check);
 
         setCart(data.cart.items);
+        setLoading(false);
+
+        // <Alert icon={<ShoppingCart />} className="max-w-xl">
+        //   <AlertTitle>Heads up!</AlertTitle>
+        //   <AlertDescription>
+        //     You can use a terminal to run commands on your computer.
+        //   </AlertDescription>
+        // </Alert>;
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -44,6 +58,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addToCart = async (id: string) => {
+    setLoading(true);
     if (quantity < 1) {
       return;
     }
@@ -61,11 +76,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (data.success) {
-        console.log(data);
+        // console.log(data);
+        setLoading(false);
         getCart();
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
