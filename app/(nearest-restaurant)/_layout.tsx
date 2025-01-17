@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+/* eslint-disable import/order */
 import React from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
@@ -6,7 +6,6 @@ const NearestRestaurantStackLayout = () => {
   const { name } = useLocalSearchParams();
 
   console.log(name);
-  
 
   return (
     <Stack>
@@ -18,7 +17,7 @@ const NearestRestaurantStackLayout = () => {
           headerLargeTitle: true,
           headerLargeTitleStyle: {
             fontSize: 30,
-            fontWeight: 'bold',
+            // fontWeight: 'bold',
           },
           headerLargeTitleShadowVisible: false,
         }}

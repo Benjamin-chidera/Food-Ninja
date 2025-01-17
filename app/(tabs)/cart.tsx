@@ -1,14 +1,22 @@
-import { View, Text, Image, ImageBackground } from 'react-native';
+/* eslint-disable import/order */
+import { View, Text, Image, ImageBackground, Alert, FlatList } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCartStore } from '~/store/cart';
 import { Button } from '~/components/ui/button';
+import { useStripe } from '@stripe/stripe-react-native';
 
 import cartTotal from '~/assets/cart-total.png';
+import SwipeableRow from '~/components/SwipeableRow';
+// import SwipeToPayButton from '~/components/buttons/swiper-to-pay';
+import axios from 'axios';
+
+import * as SecureStore from 'expo-secure-store';
 
 const Cart = () => {
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
   const { cart } = useCartStore();
-  console.log(cart, '8');
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
   const totalPrice = cart.reduce((acc, item) => acc + item.food.price, 0);
 
@@ -18,39 +26,108 @@ const Cart = () => {
 
   console.log(totalPrice, 'totalPrice');
 
+  console.log(apiUrl);
+
+  const initializePaymentSheet = async () => {
+    try {
+      // if (!cart || totalPrice) return;
+
+      const token = await SecureStore.getItemAsync('token');
+
+      if (!token) {
+        return;
+      }
+
+      const { data } = await axios.post(`${apiUrl}/payment/request-payment`, {
+        // item: cart.map((item) => ({
+        //   foodId: item.food._id,
+        //   quantity: item.quantity,
+        // })),
+        item: cart,
+        amount: totalPrice,
+        userId: token,
+      });
+
+      // console.log(data);
+
+      const { clientSecret } = data;
+
+      const initSheet = await initPaymentSheet({
+        paymentIntentClientSecret: clientSecret,
+        merchantDisplayName: 'Food Ninja', // Display name on the payment sheet
+      });
+
+      if (initSheet.error) {
+        alert(`Error initializing payment sheet: ${initSheet.error.message}`);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    const result = await presentPaymentSheet();
+    console.log(result);
+
+    if (result.error) {
+      alert(`Payment failed: ${result.error.message}`);
+    } else {
+      alert('Payment successful!');
+      // navigation.navigate('OrderPage'); // Navigate to the order page
+    }
+  };
+
+  const handlePayment = async () => {
+    // setLoading(true);
+
+    const isInitialized = await initializePaymentSheet();
+    if (isInitialized) {
+      await openPaymentSheet();
+    }
+
+    // setLoading(false);
+  };
+
   return (
     <SafeAreaView className="flex-1 p-5">
       <Text className=" text-2xl font-bold">Your Cart</Text>
 
-      <View className=" mt-5">
-        {cart.map((item) => (
-          <View
-            key={item.food._id}
-            className="mb-5 flex-row items-center justify-between gap-5 rounded-3xl bg-white p-3 shadow-sm">
-            <View className=" flex-row items-center gap-3">
-              <Image source={{ uri: item.food.image }} className="h-16 w-16 rounded-md" />
+      <FlatList
+        keyExtractor={(item) => item?.food?._id}
+        data={cart}
+        renderItem={({ item }) => (
+          <SwipeableRow>
+            <View className="mb-3 h-[95px] flex-row items-center justify-between gap-5 rounded-3xl bg-white p-3 shadow-sm">
+              <View className=" flex-row items-center gap-3">
+                <Image source={{ uri: item.food.image }} className="h-16 w-16 rounded-md" />
 
-              <View>
-                <Text className=" font-bold">{item.food.name}</Text>
-                <Text className=" mt-1 capitalize text-gray-400">{item.food.restaurant}</Text>
+                <View>
+                  <Text className=" font-bold">{item.food.name}</Text>
+                  <Text className=" mt-1 capitalize text-gray-400">{item.food.restaurant}</Text>
 
-                <Text className=" mt-2 font-bold text-green-500">${item.food.price}</Text>
+                  <Text className=" mt-2 font-bold text-green-500">${item.food.price}</Text>
+                </View>
+              </View>
+
+              <View className=" flex-row items-center gap-2">
+                <Button className=" bg-[#53E88B] opacity-35" size="sm">
+                  <Text className=" font-bold text-[#15BE77]">-</Text>
+                </Button>
+                <Text>{item.quantity}</Text>
+                <Button className=" bg-[#53E88B]" size="sm">
+                  <Text className=" font-bold text-white">+</Text>
+                </Button>
               </View>
             </View>
+          </SwipeableRow>
+        )}
+        showsHorizontalScrollIndicator={false}
+        contentContainerClassName=" mt-5"
+      />
 
-            <View className=" flex-row items-center gap-2">
-              <Button className=" bg-[#53E88B] opacity-35" size="sm">
-                <Text className=" font-bold text-[#15BE77]">-</Text>
-              </Button>
-              <Text>{item.quantity}</Text>
-              <Button className=" bg-[#53E88B]" size="sm">
-                <Text className=" font-bold text-white">+</Text>
-              </Button>
-            </View>
-          </View>
-        ))}
-      </View>
-
+      {/* this is for showing the total price */}
       <View className=" absolute bottom-2 left-0 right-0 m-3 h-[206px] rounded-xl bg-[#15BE77]">
         <ImageBackground source={cartTotal} className=" h-full w-full p-5">
           <View className=" flex-1">
@@ -74,9 +151,11 @@ const Cart = () => {
             </View>
           </View>
 
-          <Button className=" h-[325px] w-full rounded-xl bg-white">
+          <Button className=" h-[325px] w-full rounded-xl bg-white" onPress={handlePayment}>
             <Text className=" font-bold text-green-500">Place My Order</Text>
           </Button>
+
+          {/* <SwipeToPayButton /> */}
         </ImageBackground>
       </View>
     </SafeAreaView>

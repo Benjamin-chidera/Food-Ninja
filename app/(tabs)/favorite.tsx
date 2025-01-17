@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Link } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ScrollView } from 'react-native';
 
 import RemoveFav from '~/components/buttons/remove-fav';
 import { useAuth } from '~/store/auth-context';
@@ -60,7 +60,7 @@ const Favorite = () => {
   }
 
   return (
-    <View>
+    <ScrollView>
       <View className=" mx-5 mt-3 flex-row flex-wrap gap-4">
         {favorites.map((r) => (
           <View className="relative  w-48 gap-2 rounded-xl bg-white p-3" key={r._id}>
@@ -81,7 +81,7 @@ const Favorite = () => {
           </View>
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

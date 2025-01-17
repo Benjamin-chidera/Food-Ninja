@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import { View, Text, ScrollView, TextInput, Image, Platform } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -53,13 +54,15 @@ const MoreRestaurants = () => {
   ];
 
   return (
-    <SafeAreaView className=" mt-10">
+    <SafeAreaView className=" mt-10 flex-1">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
-        <View className={`${platform.OS === 'ios' ? 'mt-14' : 'mt-5'}`}>
-          <View className=" relative">
+        <View className={`${platform.OS === 'ios' ? 'mt-14' : 'mt-5'} items-center justify-center`}>
+          <View
+            className=" relative mx-5 
+          ">
             <TextInput
-              className=" h-[50px] w-full rounded-lg bg-green-200 p-3 pl-16"
+              className=" h-[50px] w-[360px] rounded-lg bg-green-200 p-3 pl-16"
               placeholder="What do you want to order"
             />
 
@@ -70,7 +73,7 @@ const MoreRestaurants = () => {
         </View>
         {/* Search Bar */}
 
-        <View className=" mx-5 mt-3 flex-row flex-wrap gap-4 ">
+        <View className=" mx-5 mt-3 flex-row flex-wrap items-center justify-center gap-4">
           {restaurant.map((r) => (
             <Link key={r?.id} href={`/(nearest-restaurant)/${r.name}`}>
               <View className="mt-7 gap-2  rounded-xl bg-white p-3">
