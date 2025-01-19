@@ -47,7 +47,7 @@ const TabsLayout = () => {
           tabBarIcon: ({ color, size }) => (
             <View className=" relative">
               <ShoppingCart color={color} size={size} />
-              {cart.length > 0 && (
+              {cart?.length > 0 && (
                 <Text className=" absolute -top-2.5 right-2 rounded-full text-sm  text-red-500">
                   {cart?.length}
                 </Text>

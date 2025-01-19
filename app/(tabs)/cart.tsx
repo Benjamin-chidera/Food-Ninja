@@ -18,7 +18,7 @@ const Cart = () => {
   const { cart } = useCartStore();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
-  const totalPrice = cart.reduce((acc, item) => acc + item.food.price, 0);
+  const totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
 
   const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -43,9 +43,15 @@ const Cart = () => {
         //   foodId: item.food._id,
         //   quantity: item.quantity,
         // })),
+
         item: cart,
         amount: totalPrice,
         userId: token,
+
+        // metadata: {
+        //   item: JSON.stringify(cart), // Pass item data as a JSON string
+        //   userId: token, // Pass user ID
+        // },
       });
 
       // console.log(data);
@@ -95,19 +101,19 @@ const Cart = () => {
       <Text className=" text-2xl font-bold">Your Cart</Text>
 
       <FlatList
-        keyExtractor={(item) => item?.food?._id}
+        keyExtractor={(item) => item?._id}
         data={cart}
         renderItem={({ item }) => (
           <SwipeableRow>
             <View className="mb-3 h-[95px] flex-row items-center justify-between gap-5 rounded-3xl bg-white p-3 shadow-sm">
               <View className=" flex-row items-center gap-3">
-                <Image source={{ uri: item.food.image }} className="h-16 w-16 rounded-md" />
+                <Image source={{ uri: item.image }} className="h-16 w-16 rounded-md" />
 
                 <View>
-                  <Text className=" font-bold">{item.food.name}</Text>
-                  <Text className=" mt-1 capitalize text-gray-400">{item.food.restaurant}</Text>
+                  <Text className=" font-bold">{item.name}</Text>
+                  <Text className=" mt-1 capitalize text-gray-400">{item.restaurant}</Text>
 
-                  <Text className=" mt-2 font-bold text-green-500">${item.food.price}</Text>
+                  <Text className=" mt-2 font-bold text-green-500">${item.price}</Text>
                 </View>
               </View>
 

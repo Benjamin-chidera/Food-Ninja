@@ -33,11 +33,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
       const { data } = await axios(`${apiUrl}/cart/get-cart/${token}`);
       if (data.success) {
-        // console.log(data.cart.items);
+        // console.log(data);
         // const check = data.cart.items.some((item: any) => item.food._id === id);
         // setIsInCart(check);
 
-        setCart(data.cart.items);
+        setCart(data.cart);
         setLoading(false);
 
         // <Alert icon={<ShoppingCart />} className="max-w-xl">
@@ -76,7 +76,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (data.success) {
-        // console.log(data);
+        console.log(data);
         setLoading(false);
         getCart();
       }

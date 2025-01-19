@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 interface cartProps {
-  food: {
+ 
     _id: string;
     name: string;
     description: string;
@@ -9,7 +9,7 @@ interface cartProps {
     image: string;
     tags: string[];
     restaurant: string;
-  };
+
   quantity: number;
 }
 
