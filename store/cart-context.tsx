@@ -13,6 +13,7 @@ type CartProps = {
   isInCart: boolean | string;
   setIsInCart: (isInCart: boolean) => void;
   addToCart: (id: string) => Promise<void>;
+  removeCart: (id: string) => Promise<void>;
 };
 
 const CartContext = createContext<CartProps | null>(null);
@@ -86,6 +87,34 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const removeCart = async (id: string) => {
+    console.log(id);
+
+    setLoading(true);
+    try {
+      const token = await SecureStore.getItemAsync('token');
+      console.log(token);
+
+      if (!token) {
+        return console.log('User not found');
+      }
+
+      const { data } = await axios.post(`${apiUrl}/cart/remove-from-cart`, {
+        userId: token,
+        foodId: id,
+      });
+
+      if (data.success) {
+        console.log(data);
+        getCart();
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -94,6 +123,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         isInCart,
         setIsInCart,
         addToCart,
+        removeCart,
       }}>
       {children}
     </CartContext.Provider>

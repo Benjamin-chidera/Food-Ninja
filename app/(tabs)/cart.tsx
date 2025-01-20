@@ -12,6 +12,8 @@ import SwipeableRow from '~/components/SwipeableRow';
 import axios from 'axios';
 
 import * as SecureStore from 'expo-secure-store';
+import { SendToBack, ShoppingCart } from 'lucide-react-native';
+import { Link } from 'expo-router';
 
 const Cart = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
@@ -97,14 +99,26 @@ const Cart = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 p-5">
+    <SafeAreaView className="flex-1 bg-white p-5">
       <Text className=" text-2xl font-bold">Your Cart</Text>
+
+      {cart.length < 1 && (
+        <View className=" mt-5 flex-1 items-center justify-center">
+          <View className=" relative items-center justify-center">
+            <ShoppingCart size={70} color="#53E88B" />
+
+            <Text className=" absolute -top-4 text-2xl">🥲</Text>
+          </View>
+
+          <Text className=" items-center text-xl font-bold text-gray-500">Your Cart is Empty</Text>
+        </View>
+      )}
 
       <FlatList
         keyExtractor={(item) => item?._id}
         data={cart}
         renderItem={({ item }) => (
-          <SwipeableRow>
+          <SwipeableRow id={item?._id}>
             <View className="mb-3 h-[95px] flex-row items-center justify-between gap-5 rounded-3xl bg-white p-3 shadow-sm">
               <View className=" flex-row items-center gap-3">
                 <Image source={{ uri: item.image }} className="h-16 w-16 rounded-md" />
@@ -134,36 +148,44 @@ const Cart = () => {
       />
 
       {/* this is for showing the total price */}
-      <View className=" absolute bottom-2 left-0 right-0 m-3 h-[206px] rounded-xl bg-[#15BE77]">
-        <ImageBackground source={cartTotal} className=" h-full w-full p-5">
-          <View className=" flex-1">
-            <View className=" flex-row items-center justify-between">
-              {/* this is for the sub total */}
-              <Text className=" text-xl font-bold text-white"> SubTotal</Text>
-              <Text className=" text-xl font-bold text-white"> SubTotal</Text>
+      {cart.length > 1 && (
+        <View className=" absolute bottom-2 left-0 right-0 m-3 h-[206px] rounded-xl bg-[#15BE77]">
+          <ImageBackground source={cartTotal} className=" h-full w-full p-5">
+            <View className=" flex-1">
+              <View className=" flex-row items-center justify-between">
+                {/* this is for the sub total */}
+                <Text className=" text-xl font-bold text-white"> SubTotal</Text>
+                <Text className=" text-xl font-bold text-white"> SubTotal</Text>
+              </View>
+
+              <View className=" flex-row items-center justify-between">
+                {/* this is for the delivery charges */}
+                <Text className=" text-xl font-bold text-white">Delivery Charges</Text>
+                <Text className=" text-xl font-bold text-white">Delivery Charges</Text>
+              </View>
+
+              <View className=" mt-7 flex-row items-center justify-between">
+                {/* this is for the total */}
+
+                <Text className=" text-xl font-bold text-white">Total</Text>
+                <Text className=" text-xl font-bold text-white">Total</Text>
+              </View>
             </View>
 
-            <View className=" flex-row items-center justify-between">
-              {/* this is for the delivery charges */}
-              <Text className=" text-xl font-bold text-white">Delivery Charges</Text>
-              <Text className=" text-xl font-bold text-white">Delivery Charges</Text>
-            </View>
+            <Button className=" h-[325px] w-full rounded-xl bg-white" onPress={handlePayment}>
+              <Text className=" font-bold text-green-500">Place My Order</Text>
+            </Button>
 
-            <View className=" mt-7 flex-row items-center justify-between">
-              {/* this is for the total */}
+            {/* <SwipeToPayButton /> */}
+          </ImageBackground>
+        </View>
+      )}
 
-              <Text className=" text-xl font-bold text-white">Total</Text>
-              <Text className=" text-xl font-bold text-white">Total</Text>
-            </View>
-          </View>
-
-          <Button className=" h-[325px] w-full rounded-xl bg-white" onPress={handlePayment}>
-            <Text className=" font-bold text-green-500">Place My Order</Text>
-          </Button>
-
-          {/* <SwipeToPayButton /> */}
-        </ImageBackground>
-      </View>
+      <Link
+        href="/(orders)"
+        className=" absolute bottom-3 right-3 w-12 rounded-full bg-green-500 p-2">
+        <SendToBack color={'white'} />
+      </Link>
     </SafeAreaView>
   );
 };

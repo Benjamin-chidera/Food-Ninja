@@ -133,6 +133,15 @@ export default function Layout() {
 
               {/* this is for the popular menu */}
 
+              {/* this is for the orders */}
+              <Stack.Screen
+                name="(orders)"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              {/* this is for the orders */}
+
               {/* <statusbar /> */}
             </Stack>
             <PortalHost />

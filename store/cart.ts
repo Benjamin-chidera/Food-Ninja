@@ -1,14 +1,13 @@
 import { create } from 'zustand';
 
 interface cartProps {
- 
-    _id: string;
-    name: string;
-    description: string;
-    price: number | string | any;
-    image: string;
-    tags: string[];
-    restaurant: string;
+  _id: string;
+  name: string;
+  description: string;
+  price: number | string | any;
+  image: string;
+  tags: string[];
+  restaurant: string;
 
   quantity: number;
 }

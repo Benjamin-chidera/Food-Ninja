@@ -2,8 +2,19 @@ import { Trash2 } from 'lucide-react-native';
 import React, { Component, PropsWithChildren } from 'react';
 import { Animated, StyleSheet, Text, View, I18nManager, Alert } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { useGlobalCart } from '~/store/cart-context';
 
-export default class SwipeableRow extends Component<PropsWithChildren<unknown>> {
+// Functional Wrapper
+const SwipeableRowWrapper = (props: { id: string | number; children: React.ReactNode }) => {
+  const { removeCart } = useGlobalCart();
+
+  return <SwipeableRow {...props} removeCart={removeCart} />;
+};
+
+// Class Component
+class SwipeableRow extends Component<
+  PropsWithChildren<{ id: string | number; removeCart: (id: string | number) => void }>
+> {
   private renderRightAction = (
     text: React.ReactNode,
     color: string,
@@ -16,19 +27,13 @@ export default class SwipeableRow extends Component<PropsWithChildren<unknown>> 
     });
     const pressHandler = () => {
       this.close();
-      // this is where the delete action will be called
+
       Alert.alert(
         'Action Confirmed',
         'You pressed the trash button!',
         [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: () => console.log('Trash action confirmed'),
-          },
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'OK', onPress: () => console.log('Trash action confirmed') },
         ],
         { cancelable: true }
       );
@@ -68,7 +73,8 @@ export default class SwipeableRow extends Component<PropsWithChildren<unknown>> 
   };
 
   render() {
-    const { children } = this.props;
+    const { children, id, removeCart } = this.props;
+
     return (
       <Swipeable
         ref={this.updateRef}
@@ -76,10 +82,7 @@ export default class SwipeableRow extends Component<PropsWithChildren<unknown>> 
         enableTrackpadTwoFingerGesture
         rightThreshold={40}
         renderRightActions={this.renderRightActions}
-        onSwipeableOpen={(direction) => {
-          // this is where the delete action will be called
-          Alert.alert(`Swipeable Opened`, `You swiped from the ${direction} side.`);
-        }}
+        onSwipeableOpen={() => removeCart(id)}
         onSwipeableClose={(direction) => {
           console.log(`Closing swipeable to the ${direction}`);
         }}>
@@ -107,3 +110,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default SwipeableRowWrapper;
