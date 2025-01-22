@@ -60,18 +60,24 @@ const Favorite = () => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView className=" bg-white">
       <View className=" mx-5 mt-3 flex-row flex-wrap gap-4">
         {favorites.map((r) => (
-          <View className="relative  w-48 gap-2 rounded-xl bg-white p-3" key={r._id}>
-            <Link href={`/(popular-menu)/${r?._id}`}>
-              <Image source={{ uri: r?.image }} className="h-36 w-40" />
-            </Link>
-            <Text className="text-center text-lg font-semibold">{r?.name}</Text>
-            <Text className="text-center text-sm text-gray-500">{r?.restaurant}</Text>
-            <Text className="text-center text-sm text-gray-500">{r?.price}</Text>
+          <View key={r?._id}>
+            <Link href={`/(popular-menu)/${r?._id}`} className="mt-3">
+              <View className=" relative w-full flex-row items-center gap-4 rounded-xl bg-white p-3 shadow-md shadow-[#0002]">
+                <Image source={{ uri: r?.image }} className=" h-20 w-20 rounded-md " />
 
-            <View className="absolute right-1 top-1 rounded-full bg-green-500 p-2">
+                <View>
+                  <Text className=" text-lg font-semibold">{r?.name}</Text>
+                  <Text className=" text-sm text-gray-500" numberOfLines={1}>
+                    {r?.restaurant}
+                  </Text>
+                  <Text className=" text-xl font-bold text-green-600">{r?.price}</Text>
+                </View>
+              </View>
+            </Link>
+            <View className="absolute bottom-5 right-3 rounded-full bg-green-500 p-2">
               <RemoveFav
                 loading={loadingState[r._id] || false} // Check loading for the specific item
                 handleRemoveFavorite={handleRemoveFavorite}

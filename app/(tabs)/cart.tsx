@@ -41,22 +41,10 @@ const Cart = () => {
       }
 
       const { data } = await axios.post(`${apiUrl}/payment/request-payment`, {
-        // item: cart.map((item) => ({
-        //   foodId: item.food._id,
-        //   quantity: item.quantity,
-        // })),
-
         item: cart,
         amount: totalPrice,
         userId: token,
-
-        // metadata: {
-        //   item: JSON.stringify(cart), // Pass item data as a JSON string
-        //   userId: token, // Pass user ID
-        // },
       });
-
-      // console.log(data);
 
       const { clientSecret } = data;
 

@@ -29,6 +29,7 @@ const NearestRestaurantStackLayout = () => {
           headerTransparent: true,
           headerTitle: `Favorite Restaurants`,
           headerLargeTitle: true,
+          // headerShown: false,
         }}
       />
     </Stack>

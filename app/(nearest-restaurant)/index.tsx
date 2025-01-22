@@ -2,7 +2,7 @@
 import { View, Text, ScrollView, TextInput, Image, Platform } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search } from 'lucide-react-native';
+import { Search, ShoppingCart } from 'lucide-react-native';
 import { Link } from 'expo-router';
 
 const MoreRestaurants = () => {
@@ -57,7 +57,7 @@ const MoreRestaurants = () => {
     <SafeAreaView className=" mt-10 flex-1">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
-        <View className={`${platform.OS === 'ios' ? 'mt-14' : 'mt-5'} items-center justify-center`}>
+        <View className={`${platform.OS === 'ios' ? 'mt-16' : 'mt-5'} items-center justify-center`}>
           <View
             className=" relative mx-5 
           ">
@@ -74,14 +74,23 @@ const MoreRestaurants = () => {
         {/* Search Bar */}
 
         <View className=" mx-5 mt-3 flex-row flex-wrap items-center justify-center gap-4">
-          {restaurant.map((r) => (
-            <Link key={r?.id} href={`/(nearest-restaurant)/${r.name}`}>
-              <View className="mt-7 gap-2  rounded-xl bg-white p-3">
-                <Image source={{ uri: r?.image }} className="h-36 w-40" />
-                <Text className=" text-center text-lg font-semibold">
-                  {r?.name.replace('-', ' ').toUpperCase()}
+          {restaurant.map((item) => (
+            <Link key={item?.id} href={`/(nearest-restaurant)/${item.name}`}>
+              <View className=" relative w-full flex-row items-center gap-4 rounded-xl bg-white p-3">
+                <Image source={{ uri: item?.image }} className=" h-20 w-20 rounded-md " />
+
+                <View>
+                  <Text className=" text-lg font-semibold">{item?.name}</Text>
+                  <Text className=" text-sm text-gray-500" numberOfLines={1}>
+                    {item?.name.replace('-', ' ').toUpperCase()}
+                  </Text>
+                  {/* <Text className=" text-xl font-bold text-green-600">{item?.price}</Text> */}
+                </View>
+
+                <Text className=" absolute right-3 rounded-full bg-green-500 p-2 text-gray-500">
+                  {/* <ChevronRight color={'green'} /> */}
+                  <ShoppingCart color={'white'} />
                 </Text>
-                <Text className=" text-center text-sm text-gray-500">{r?.location}</Text>
               </View>
             </Link>
           ))}

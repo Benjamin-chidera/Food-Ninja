@@ -68,10 +68,9 @@ const NearestRestaurant = () => {
         renderItem={({ item }) => (
           <Link href={`/(nearest-restaurant)/${item.name}`}>
             <View className=" rounded-xl bg-white p-3">
-              {/* <Pressable onPress={() => handlePress(item.name)}> */}
-              <Image source={{ uri: item.image }} className=" h-40 w-40 rounded-md" />
+              <Image source={{ uri: item.image }} className=" h-32 w-40 rounded-md" />
 
-              <Text className="mt-5 text-center text-lg font-semibold capitalize">
+              <Text className="mt-2 text-center text-lg font-semibold capitalize" numberOfLines={1}>
                 {item.name.replace('-', ' ')}
               </Text>
               <Text className=" text-center text-sm text-gray-500">{item.location}</Text>

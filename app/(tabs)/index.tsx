@@ -7,7 +7,6 @@ import React, { useEffect } from 'react';
 import {
   View,
   Text,
-  Pressable,
   Platform,
   TextInput,
   ImageBackground,
@@ -96,9 +95,9 @@ const Home = () => {
       {/* Hero section */}
 
       <ScrollView
-        className={` mb-28 ${platform && 'mb-[130px]'} mt-2`}
+        className={` mb-20 ${platform && 'mb-[130px]'} `}
         showsVerticalScrollIndicator={false}>
-        <View className="my-7 w-full rounded-3xl bg-green-500 opacity-80">
+        <View className="my-4 w-full rounded-3xl bg-green-500 opacity-80">
           <ImageBackground
             source={heroFish}
             className="relative h-[180px] flex-row items-center justify-between rounded-3xl px-5">

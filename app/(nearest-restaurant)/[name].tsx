@@ -27,9 +27,9 @@ const EachRestaurant = () => {
   return (
     <View>
       <SafeAreaView className="">
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} className=" mx-5 pb-[500px]">
           {/* Search Bar */}
-          <View className={`${platform.OS === 'ios' ? 'mt-5' : 'mt-5'}`}>
+          <View className={`${platform.OS === 'ios' ? 'mt-5' : 'mt-14'}`}>
             <View className=" relative">
               <TextInput
                 className=" h-[50px] w-full rounded-lg bg-green-200 p-3 pl-16"
@@ -43,24 +43,24 @@ const EachRestaurant = () => {
           </View>
           {/* Search Bar */}
 
-          <View className=" mx-5 mt-3 flex-row flex-wrap gap-4">
+          <View className=" mt-3 flex-row flex-wrap gap-4">
             {nearestRestaurant.map((r) => (
               <Link href={`/(popular-menu)/${r?._id}`} key={r?._id}>
-                <View className="relative mt-7  w-48 gap-2 rounded-xl bg-white p-3">
-                  <Image source={{ uri: r?.image }} className="h-36 w-40" />
-                  <Text className=" text-center text-lg font-semibold">{r?.name}</Text>
-                  <Text className=" text-center text-sm capitalize text-gray-500">
-                    {r?.restaurant.replace('-', ' ')}
-                  </Text>
-                  <Text className=" text-center text-sm text-gray-500">{r?.price}</Text>
+                <View className=" relative w-full flex-row items-center gap-4 rounded-xl bg-white p-3">
+                  <Image source={{ uri: r?.image }} className=" h-20 w-20 rounded-md " />
 
-                  <TouchableOpacity
-                    className=" absolute right-1 top-1 rounded-full bg-green-500 p-3"
-                    activeOpacity={0.7}>
-                    <Text>
-                      <ShoppingCart color="white" size={24} />
+                  <View>
+                    <Text className=" text-lg font-semibold">{r?.name}</Text>
+                    <Text className=" text-sm text-gray-500" numberOfLines={1}>
+                      {r?.restaurant.replace('-', ' ').toUpperCase()}
                     </Text>
-                  </TouchableOpacity>
+                    <Text className=" text-xl font-bold text-green-600">{r?.price}</Text>
+                  </View>
+
+                  <Text className=" absolute right-3 rounded-full bg-green-500 p-2 text-gray-500">
+                    {/* <ChevronRight color={'green'} /> */}
+                    <ShoppingCart color={'white'} />
+                  </Text>
                 </View>
               </Link>
             ))}

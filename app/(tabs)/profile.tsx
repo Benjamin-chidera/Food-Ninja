@@ -113,7 +113,7 @@ const App = () => {
             </View>
           </View>
 
-          <Biometric />
+          {/* <Biometric /> */}
         </View>
 
         <View className=" mb-5 mt-5 flex-row items-center justify-center gap-10">
