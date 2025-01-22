@@ -142,6 +142,16 @@ export default function Layout() {
               />
               {/* this is for the orders */}
 
+              {/* this is for the chat screen */}
+
+              <Stack.Screen
+                name="(chat)"
+                options={{
+                  headerShown: false,
+                }}
+              />
+              {/* this is for the chat screen */}
+
               {/* <statusbar /> */}
             </Stack>
             <PortalHost />

@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert';
 import { ShoppingCart } from 'lucide-react-native';
+import { useOrderStore } from './order';
 
 type CartProps = {
   quantity: number;
@@ -14,6 +15,7 @@ type CartProps = {
   setIsInCart: (isInCart: boolean) => void;
   addToCart: (id: string) => Promise<void>;
   removeCart: (id: string) => Promise<void>;
+  getOrders: () => Promise<void>;
 };
 
 const CartContext = createContext<CartProps | null>(null);
@@ -23,6 +25,8 @@ export const useGlobalCart = () => useContext(CartContext);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
   const { quantity, setQuantity, isInCart, setIsInCart, setCart, setLoading } = useCartStore();
+
+  const { setOrder } = useOrderStore();
 
   const getCart = async () => {
     setLoading(true);
@@ -115,6 +119,31 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const getOrders = async () => {
+    setLoading(true);
+    try {
+      const token = await SecureStore.getItemAsync('token');
+      console.log(token);
+
+      if (!token) {
+        return console.log('User not found');
+      }
+
+      const { data } = await axios.get(`${apiUrl}/order/${token}`);
+
+      if (data.success) {
+        setOrder(data.orders);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
   return (
     <CartContext.Provider
       value={{
@@ -124,6 +153,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setIsInCart,
         addToCart,
         removeCart,
+        getOrders,
       }}>
       {children}
     </CartContext.Provider>

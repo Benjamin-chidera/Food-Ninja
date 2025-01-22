@@ -35,12 +35,7 @@ const TabsLayout = () => {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="chat"
-        options={{
-          tabBarIcon: ({ color, size }) => <MessageCircle color={color} size={size} />,
-        }}
-      /> */}
+
       <Tabs.Screen
         name="cart"
         options={{
