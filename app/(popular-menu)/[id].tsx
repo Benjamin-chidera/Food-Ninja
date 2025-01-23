@@ -1,13 +1,5 @@
 /* eslint-disable import/order */
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Button as NativeButton,
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
@@ -23,8 +15,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const PopularMenuId = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
-  const { id } = useLocalSearchParams();
-  const [sheetIndex, setSheetIndex] = useState(-1);
+  const { id } = useLocalSearchParams();;
   const {
     foodDetails,
     setFoodDetails,
@@ -37,7 +28,7 @@ const PopularMenuId = () => {
 
   const { getFavorite } = useAuth();
 
-  const { quantity, setQuantity, addToCart } = useGlobalCart();
+  const { quantity, setQuantity, addToCart, increaseQuantity } = useGlobalCart();
 
   // this is for the bottom sheet
 
@@ -136,13 +127,14 @@ const PopularMenuId = () => {
 
               <View className=" flex-row items-center gap-5">
                 {/* this is for controlling the quantity of the food item */}
-                <Button className=" bg-green-500" onPress={() => setQuantity(quantity + 1)}>
-                  <Text className=" text-2xl text-white">+</Text>
-                </Button>
-                <Text>{quantity}</Text>
                 <Button className=" bg-green-500" onPress={handleDecrease}>
                   <Text className=" text-2xl text-white">-</Text>
                 </Button>
+                <Text>{quantity}</Text>
+                <Button className=" bg-green-500" onPress={() => setQuantity(quantity + 1)}>
+                  <Text className=" text-2xl text-white">+</Text>
+                </Button>
+
                 {/* this is for controlling the quantity of the food item */}
               </View>
             </View>

@@ -2,17 +2,9 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
 import { Link } from 'expo-router';
-import { Bell, FilterIcon, Search } from 'lucide-react-native';
+import { Bell, Dot, FilterIcon, Search } from 'lucide-react-native';
 import React, { useEffect } from 'react';
-import {
-  View,
-  Text,
-  Platform,
-  TextInput,
-  ImageBackground,
-  Image,
-  ScrollView,
-} from 'react-native';
+import { View, Text, Platform, TextInput, ImageBackground, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { io } from 'socket.io-client';
@@ -70,8 +62,12 @@ const Home = () => {
       <View className="mb-5 flex-row items-center justify-between">
         <Text className=" max-w-[200px] text-4xl font-bold">Find Your Favorite Food</Text>
 
-        <View className=" rounded-full bg-white p-3">
+        <View className=" relative rounded-full bg-white p-3">
           <Bell size={25} color="green" />
+
+          <View className="absolute right-2 top-2 rounded-full bg-red-500 ">
+            <Dot color={'white'} size={10} />
+          </View>
         </View>
       </View>
       {/* Search Bar */}

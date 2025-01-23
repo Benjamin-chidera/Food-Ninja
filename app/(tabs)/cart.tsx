@@ -14,26 +14,28 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { SendToBack, ShoppingCart } from 'lucide-react-native';
 import { Link } from 'expo-router';
+import { useGlobalCart } from '~/store/cart-context';
 
 const Cart = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL_PRODUCTION;
-  const { cart } = useCartStore();
+  const { cart, quantity, setQuantity } = useCartStore();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const { increaseQuantity, decreaseQuantity } = useGlobalCart();
 
   const totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
 
   const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
 
+  const subTotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  // note: i want to add a logic so for every time the subtotal is higher than 3000, i want to increase the delivery fee by 5
+
   console.log(totalPrice, totalQuantity);
 
   console.log(totalPrice, 'totalPrice');
 
-  console.log(apiUrl);
-
   const initializePaymentSheet = async () => {
     try {
-      // if (!cart || totalPrice) return;
-
       const token = await SecureStore.getItemAsync('token');
 
       if (!token) {
@@ -113,18 +115,27 @@ const Cart = () => {
 
                 <View>
                   <Text className=" font-bold">{item.name}</Text>
-                  <Text className=" mt-1 capitalize text-gray-400">{item.restaurant}</Text>
+                  <View className=" mt-1 flex-row items-center justify-between gap-2">
+                    <Text className=" mt-1 capitalize text-gray-400">{item.restaurant}</Text>
+                    <Text className=" text-sm text-gray-500">x{item.quantity}</Text>
+                  </View>
 
                   <Text className=" mt-2 font-bold text-green-500">${item.price}</Text>
                 </View>
               </View>
 
               <View className=" flex-row items-center gap-2">
-                <Button className=" bg-[#53E88B] opacity-35" size="sm">
+                <Button
+                  className=" bg-[#53E88B] opacity-35"
+                  size="sm"
+                  onPress={() => decreaseQuantity(item._id)}>
                   <Text className=" font-bold text-[#15BE77]">-</Text>
                 </Button>
-                <Text>{item.quantity}</Text>
-                <Button className=" bg-[#53E88B]" size="sm">
+                <Text>{totalQuantity}</Text>
+                <Button
+                  className=" bg-[#53E88B]"
+                  size="sm"
+                  onPress={() => increaseQuantity(item._id)}>
                   <Text className=" font-bold text-white">+</Text>
                 </Button>
               </View>
@@ -136,20 +147,20 @@ const Cart = () => {
       />
 
       {/* this is for showing the total price */}
-      {cart.length > 1 && (
+      {cart.length > 0 && (
         <View className=" absolute bottom-2 left-0 right-0 m-3 h-[206px] rounded-xl bg-[#15BE77]">
           <ImageBackground source={cartTotal} className=" h-full w-full p-5">
             <View className=" flex-1">
               <View className=" flex-row items-center justify-between">
                 {/* this is for the sub total */}
                 <Text className=" text-xl font-bold text-white"> SubTotal</Text>
-                <Text className=" text-xl font-bold text-white"> SubTotal</Text>
+                <Text className=" text-xl font-bold text-white"> {subTotal}</Text>
               </View>
 
               <View className=" flex-row items-center justify-between">
                 {/* this is for the delivery charges */}
                 <Text className=" text-xl font-bold text-white">Delivery Charges</Text>
-                <Text className=" text-xl font-bold text-white">Delivery Charges</Text>
+                <Text className=" text-xl font-bold text-white">3</Text>
               </View>
 
               <View className=" mt-7 flex-row items-center justify-between">

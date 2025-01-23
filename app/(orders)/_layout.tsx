@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
-import { Bell } from 'lucide-react-native';
+import { Bell, Dot } from 'lucide-react-native';
 import React from 'react';
+import { View } from 'react-native';
 
 const OrderLayout = () => {
   return (
@@ -12,7 +13,13 @@ const OrderLayout = () => {
           headerTitle: 'Your Orders',
           headerRight: () => (
             <>
-              <Bell />
+              <View className=" shadow-xsm relative mr-4 rounded-full bg-green-500 p-2 shadow-black">
+                <Bell color={'white'} size={20} />
+
+                <View className="absolute right-0 top-0 rounded-full bg-red-500 ">
+                  <Dot color={'white'} size={10} />
+                </View>
+              </View>
             </>
           ),
         }}

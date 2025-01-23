@@ -40,7 +40,6 @@ const OrderPage = () => {
         renderItem={({ item }) => <OrderBg item={item as any} />}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
       />
-      {/* <OrderBg /> */}
     </View>
   );
 };
